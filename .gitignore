@@ -1,0 +1,11 @@
+_drafts/
+.DS_Store
+.env
+.env.*
+*.log
+__pycache__/
+.venv/
+node_modules/
+# Never commit engagement data
+**/loot/
+**/engagement-data/
