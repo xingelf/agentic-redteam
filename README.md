@@ -8,7 +8,7 @@ Updated roughly once a week.
 
 | Date | Title | Topic |
 |------|-------|-------|
-| — | Coming soon | — |
+| 2026-09-23 | [Your Agent Reads Everything. That's the Problem.](posts/2026-09-23_agent-reads-everything.md) | Indirect prompt injection |
 
 ## Tools
 
