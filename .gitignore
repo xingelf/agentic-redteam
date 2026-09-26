@@ -8,4 +8,5 @@ __pycache__/
 node_modules/
 # Never commit engagement data
 **/loot/
-**/engagement-data/
+*/*/engagement-data/
+templates
