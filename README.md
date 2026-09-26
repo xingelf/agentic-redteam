@@ -8,6 +8,7 @@ Updated roughly once a week.
 
 | Date | Title | Topic |
 |------|-------|-------|
+| 2026-09-27 | [The Agent Finds More. Who Decides What Matters?](posts/2026-09-27_agent-recon-human-judgment.md) | AI-assisted recon |
 | 2026-09-23 | [Your Agent Reads Everything. That's the Problem.](posts/2026-09-23_agent-reads-everything.md) | Indirect prompt injection |
 
 ## Tools
