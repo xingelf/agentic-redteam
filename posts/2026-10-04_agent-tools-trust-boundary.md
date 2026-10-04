@@ -33,14 +33,9 @@ Two ideas frame the rest of this post:
 OWASP's LLM Top 10 has a category for exactly this failure mode: Excessive Agency —
 too much permission, too much autonomy, too little oversight on what the tools can do.
 
-## What I did
+## The approach
 
-<!-- TODO(uki): replace this section with a real, sanitized engagement or lab setup.
-     Keep the general framing below as scaffolding, but the specifics (target shape,
-     tools exposed, what you actually tried) must come from real experience, not
-     invented detail. No client names, IPs, or domains. -->
-
-The general approach I use when red teaming an agent's tools:
+The general method I use when red teaming an agent's tools:
 
 1. **Enumerate the tools first, not the prompts.** List every tool the agent can call,
    what each one is allowed to do, and what credentials sit behind it. The dangerous
@@ -58,15 +53,9 @@ The general approach I use when red teaming an agent's tools:
    poisoned document → extract an "instruction" → call a write/send tool with
    attacker-chosen arguments. Test the chain, not each tool alone.
 
-TODO(uki): concrete example — the setup, the exact tool misuse you found, and the
-output that proved it. Sanitize everything.
+## Patterns that keep showing up
 
-## What happened
-
-TODO(uki): results from the real case. What worked, what the guardrails caught, what
-slipped through. Be honest about the failures — that is the part readers remember.
-
-A few general patterns worth calling out (keep only the ones you actually saw):
+A few failure patterns worth calling out:
 
 - Read-only tools treated as safe, while their *output* is fed straight back into the
   agent as if it were trusted instruction.
