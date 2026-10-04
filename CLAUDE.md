@@ -1,6 +1,17 @@
-# CLAUDE.md — agentic-redteam
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+# agentic-redteam
 
 Public GitHub repo. Personal showcase of agentic AI × red teaming work.
+
+## Repo facts
+
+- **Content repo, not an app.** Deliverables are Markdown (`posts/`, tool READMEs). There is no build, lint, or test command. Any code under `tools/` is self-contained per folder with its own README and requirements.
+- Lives under the private `labs/` workspace, which has its own global rules in `../CLAUDE.md`; those apply here too. This repo is one of its `projects/`-style showcases but is pushed public, so the sanitization rules below are stricter.
+- Posts carry YAML frontmatter (`title`, `date`, `tags`) and follow `templates/post.md`. Tools follow `templates/tool-README.md`.
+- `_drafts/` is gitignored (local only). Engagement data paths (`**/loot/`, `*/*/engagement-data/`) are gitignored — never commit them.
 
 ## Rules
 
