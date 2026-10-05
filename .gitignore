@@ -9,3 +9,4 @@ node_modules/
 # Never commit engagement data
 **/loot/
 */*/engagement-data/
+CLAUDE.md
