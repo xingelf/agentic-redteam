@@ -8,6 +8,7 @@ Updated roughly once a week.
 
 | Date | Title | Topic |
 |------|-------|-------|
+| 2026-10-18 | [Red Team, Visualized: The Agentic Kill-Chain](posts/2026-10-18_red-team-visualized-kill-chain.md) | Visualization / ATT&CK |
 | 2026-10-10 | [ARTEX and the Dual-Use Problem We Knew Was Coming](posts/2026-10-10_artex-dual-use.md) | Dual-use / threat intel |
 | 2026-10-08 | [GLM-5.3 Leads One Cyber Benchmark and Trails Two. Read the Fine Print.](posts/2026-10-08_glm-5-3-cyber-benchmarks.md) | LLM cyber benchmarks |
 | 2026-10-04 | [Your Agent Can Act. That's the New Attack Surface.](posts/2026-10-04_agent-tools-trust-boundary.md) | Tool abuse / trust boundaries |
@@ -28,6 +29,14 @@ Evergreen reference notes on core offensive-security topics.
 | [XML CDATA, Escaping, and the XXE Trap](security-basics/xml-cdata.md) | XML / XXE |
 | [SQL Collation, and Why It Matters for Security](security-basics/sql-collation.md) | Database internals |
 | [Expanding a Kali VM Disk (VMware + GParted)](security-basics/kali-disk-expansion.md) | Lab / homelab ops |
+
+## Visualizations
+
+Interactive, self-contained visualizations built on public frameworks. Series: *Red Team, Visualized*.
+
+| Title | What it shows | Source |
+|-------|---------------|--------|
+| [The Agentic Kill-Chain](https://claude.ai/artifact/2b9PoSo7akPqxFB4wcFvEr) | The autonomous offensive loop, stage by stage, with ATT&CK mappings, detection, and defenses | [viz/agentic-kill-chain](viz/agentic-kill-chain/) |
 
 ## Tools
 

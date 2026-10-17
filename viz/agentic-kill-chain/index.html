@@ -1,0 +1,447 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>The Agentic Kill-Chain</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+  /* Layout: a vertical six-stage loop on the left, a detail panel on the right; stacks to one column on phones. */
+  :root {
+    --bg: #e7e6e2;
+    --surface: #f2f1ed;
+    --surface-2: #dddbd4;
+    --fg: #222528;
+    --muted: #6a6d72;
+    --line: #c9c7c0;
+    --attacker: #99493a;
+    --defender: #3d6d63;
+    --accent: #45586b;
+    --radius: 10px;
+    --display: "Fraunces", Georgia, "Times New Roman", serif;
+    --body: "IBM Plex Sans", system-ui, -apple-system, Segoe UI, sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #15171a;
+      --surface: #1c1f23;
+      --surface-2: #23272c;
+      --fg: #e6e5e1;
+      --muted: #9aa0a6;
+      --line: #313640;
+      --attacker: #c9775f;
+      --defender: #6fb3a2;
+      --accent: #8aa0b5;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #15171a;
+    --surface: #1c1f23;
+    --surface-2: #23272c;
+    --fg: #e6e5e1;
+    --muted: #9aa0a6;
+    --line: #313640;
+    --attacker: #c9775f;
+    --defender: #6fb3a2;
+    --accent: #8aa0b5;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--body);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: clamp(1.5rem, 4vw, 3rem);
+  }
+
+  header { margin-bottom: 1.75rem; }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: .72rem;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 .5rem;
+  }
+  h1 {
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: clamp(1.9rem, 5vw, 3rem);
+    line-height: 1.05;
+    letter-spacing: -.01em;
+    text-wrap: balance;
+    margin: 0 0 .6rem;
+  }
+  .dek {
+    max-width: 62ch;
+    color: var(--muted);
+    font-size: 1.02rem;
+    margin: 0 0 1.1rem;
+  }
+  .note {
+    max-width: 62ch;
+    font-size: .82rem;
+    color: var(--muted);
+    border-left: 2px solid var(--line);
+    padding-left: .75rem;
+    margin: 0 0 1.4rem;
+  }
+
+  /* View toggle */
+  .toggle {
+    display: inline-flex;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 3px;
+    background: var(--surface);
+    gap: 2px;
+  }
+  .toggle button {
+    appearance: none;
+    border: 0;
+    background: transparent;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: .76rem;
+    letter-spacing: .04em;
+    padding: .4rem .9rem;
+    border-radius: 999px;
+    cursor: pointer;
+  }
+  .toggle button[aria-pressed="true"] { color: var(--bg); background: var(--fg); }
+  [data-view="attacker"] .toggle button.v-attacker[aria-pressed="true"] { background: var(--attacker); color: #fff; }
+  [data-view="defender"] .toggle button.v-defender[aria-pressed="true"] { background: var(--defender); color: #fff; }
+  .toggle-wrap { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem; margin-top: 1rem; }
+  .toggle-hint { font-size: .8rem; color: var(--muted); }
+
+  .explorer {
+    display: grid;
+    grid-template-columns: minmax(250px, 330px) 1fr;
+    gap: clamp(1rem, 3vw, 2rem);
+    align-items: start;
+  }
+  @media (max-width: 820px) { .explorer { grid-template-columns: 1fr; } }
+
+  /* Stage rail */
+  .stages { display: flex; flex-direction: column; gap: 0; margin: 0; padding: 0; list-style: none; }
+  .stage {
+    position: relative;
+    width: 100%;
+    text-align: left;
+    appearance: none;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: .8rem .9rem;
+    cursor: pointer;
+    color: var(--fg);
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: .2rem .8rem;
+    transition: border-color .15s ease, background .15s ease;
+  }
+  .stage + .stage { margin-top: 1.4rem; }
+  .stage + .stage::before {
+    content: "";
+    position: absolute;
+    top: -1.15rem;
+    left: 1.55rem;
+    width: 2px;
+    height: 1rem;
+    background: var(--line);
+  }
+  .stage:hover { border-color: var(--muted); }
+  .stage:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .stage[aria-current="true"] { border-color: var(--fg); background: var(--surface-2); }
+  .stage .num {
+    grid-row: 1 / span 2;
+    align-self: start;
+    font-family: var(--mono);
+    font-size: .8rem;
+    width: 1.6rem;
+    height: 1.6rem;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    color: var(--muted);
+  }
+  .stage[aria-current="true"] .num { border-color: var(--fg); color: var(--fg); }
+  [data-view="attacker"] .stage[aria-current="true"] .num { border-color: var(--attacker); color: var(--attacker); }
+  [data-view="defender"] .stage[aria-current="true"] .num { border-color: var(--defender); color: var(--defender); }
+  .stage .name { font-weight: 600; font-size: .98rem; }
+  .stage .tactic { font-family: var(--mono); font-size: .72rem; color: var(--muted); }
+  .loopback {
+    font-family: var(--mono);
+    font-size: .74rem;
+    color: var(--muted);
+    margin-top: 1.2rem;
+    padding-left: 1.55rem;
+    position: relative;
+  }
+  .loopback::before {
+    content: "";
+    position: absolute;
+    top: -1rem; left: 1.55rem;
+    width: 2px; height: .8rem;
+    background: var(--line);
+  }
+
+  /* Panel */
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: clamp(1.1rem, 3vw, 1.8rem);
+    min-width: 0;
+  }
+  .panel-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: .6rem 1rem; margin-bottom: .3rem; }
+  .panel h2 { font-family: var(--display); font-weight: 500; font-size: clamp(1.4rem, 3.5vw, 1.9rem); margin: 0; letter-spacing: -.01em; }
+  .panel .phase { font-family: var(--mono); font-size: .74rem; color: var(--muted); }
+  .block { border-top: 1px solid var(--line); padding-top: 1rem; margin-top: 1rem; }
+  .block:first-of-type { border-top: 0; padding-top: 0; margin-top: 1rem; }
+  .block h3 {
+    font-family: var(--mono);
+    font-size: .72rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 .5rem;
+  }
+  .block p { margin: 0; font-size: .96rem; }
+  .ids { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .2rem; }
+  .id {
+    font-family: var(--mono);
+    font-size: .76rem;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: .2rem .5rem;
+    color: var(--fg);
+    background: var(--bg);
+  }
+  .id b { font-weight: 500; color: var(--muted); }
+  .reading { display: flex; flex-direction: column; gap: .35rem; }
+  .reading a { color: var(--accent); text-decoration: none; font-size: .9rem; border-bottom: 1px solid transparent; width: fit-content; }
+  .reading a:hover { border-bottom-color: var(--accent); }
+
+  /* View-driven emphasis */
+  .block.agent { order: 1; }
+  .block.attack-ids { order: 2; }
+  .block.detect { order: 3; }
+  .block.defense { order: 4; }
+  .block.reading-block { order: 5; }
+  .panel-blocks { display: flex; flex-direction: column; }
+  [data-view="attacker"] .block.agent { border-left: 3px solid var(--attacker); padding-left: .9rem; border-top: 0; margin-left: -.1rem; }
+  [data-view="defender"] .block.defense { order: 1; border-left: 3px solid var(--defender); padding-left: .9rem; border-top: 0; }
+  [data-view="defender"] .block.detect { order: 2; border-left: 3px solid var(--defender); padding-left: .9rem; }
+  [data-view="defender"] .block.agent { order: 3; color: var(--muted); }
+  [data-view="defender"] .block.attack-ids { order: 4; }
+
+  footer { margin-top: 2.5rem; border-top: 1px solid var(--line); padding-top: 1rem; color: var(--muted); font-size: .8rem; }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+  footer p { margin: .3rem 0; max-width: 70ch; }
+
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Red Team, Visualized &middot; 01</p>
+    <h1>The Agentic Kill-Chain</h1>
+    <p class="dek">An autonomous offensive agent runs one loop: gather, find, plan, exploit, hold, take &mdash; then repeat with what it learned. The loop is old. What changed is that it now runs cheaply, without a specialist at the keyboard. Walk each stage to see what the agent does, where it gives itself away, and what closes the door.</p>
+    <p class="note">An illustrative model for authorized testing and defense. Stages map to public MITRE ATT&amp;CK tactics and techniques. No target or engagement data.</p>
+    <div class="toggle-wrap">
+      <div class="toggle" role="group" aria-label="Point of view">
+        <button class="v-attacker" data-view-btn="attacker" aria-pressed="false">Attacker view</button>
+        <button class="v-defender" data-view-btn="defender" aria-pressed="false">Defender view</button>
+      </div>
+      <span class="toggle-hint" id="viewHint">Attacker view: what the agent does at each stage.</span>
+    </div>
+  </header>
+
+  <div class="explorer">
+    <ul class="stages" id="stages" role="tablist" aria-label="Kill-chain stages"></ul>
+    <section class="panel" id="panel" aria-live="polite">
+      <div class="panel-head">
+        <h2 id="p-name"></h2>
+        <span class="phase" id="p-phase"></span>
+      </div>
+      <div class="panel-blocks" id="p-blocks"></div>
+    </section>
+  </div>
+
+  <footer>
+    <p>Sources: <a href="https://attack.mitre.org/" target="_blank" rel="noopener">MITRE ATT&amp;CK</a> (tactic and technique IDs), <a href="https://owasp.org/" target="_blank" rel="noopener">OWASP</a>. Technique mappings are representative, not exhaustive.</p>
+    <p>Part of the <em>Red Team, Visualized</em> series &middot; <a href="https://github.com/xingelf/agentic-redteam" target="_blank" rel="noopener">github.com/xingelf/agentic-redteam</a></p>
+  </footer>
+</div>
+
+<script>
+  var REPO = "https://github.com/xingelf/agentic-redteam/blob/main/";
+  var STAGES = [
+    {
+      name: "Reconnaissance",
+      phase: "ATT&CK: Reconnaissance (TA0043)",
+      agent: "The agent gathers what is public: domains, hosts, exposed services, technologies, and leaked credentials. An LLM reads and summarizes faster than a human skims, so the map is built in minutes.",
+      ids: [["T1595","Active Scanning"],["T1592","Gather Victim Host Info"],["T1596","Search Open Technical Databases"]],
+      detect: "Mostly off your systems, so little to see here directly. Watch for early, broad touch of your public surface from one source.",
+      defense: "Minimize the attack surface. Retire forgotten hosts and endpoints; the asset you forgot is the one that gets enumerated.",
+      reading: [["Your Agent Reads Everything", REPO+"posts/2026-09-23_agent-reads-everything.md"],["The Agent Finds More", REPO+"posts/2026-09-27_agent-recon-human-judgment.md"]]
+    },
+    {
+      name: "Vulnerability discovery",
+      phase: "ATT&CK: Reconnaissance (TA0043)",
+      agent: "The agent scans the mapped surface for weaknesses: outdated components, misconfigurations, weak or reused credentials, and unparameterized inputs. It triages findings and ranks the ones worth pursuing.",
+      ids: [["T1595.002","Vulnerability Scanning"],["T1595.003","Wordlist Scanning"]],
+      detect: "Scanning is noisy by nature: request volume, regular timing, and breadth of paths that a human would never touch in that pattern. This is the clearest machine-cadence signal.",
+      defense: "Patch and manage assets; put rate limiting and signature detection in front of them. A scan that finds nothing to hit goes nowhere.",
+      reading: [["SQL Injection basics", REPO+"security-basics/sql-injection.md"]]
+    },
+    {
+      name: "Attack-path planning",
+      phase: "No distinct ATT&CK technique",
+      agent: "The agent reasons over its findings and picks an order of operations: which weakness to use, what to chain next, how to reach the data. This step is the LLM's own planning, not an action on your network.",
+      ids: [["TA0042","may stage tooling: Resource Development"],["T1588","Obtain Capabilities"]],
+      detect: "This is the blind spot. Planning happens inside the model, off your systems, and leaves no trace. You detect the actions on either side of it, not the thinking.",
+      defense: "You cannot monitor the agent's reasoning, so defend the actions it plans. Assume the plan is good and make each step it would take expensive.",
+      reading: [["Your Agent Can Act", REPO+"posts/2026-10-04_agent-tools-trust-boundary.md"]]
+    },
+    {
+      name: "Exploitation",
+      phase: "ATT&CK: Initial Access (TA0001)",
+      agent: "The agent executes the plan against real targets: credential stuffing, abusing a public-facing app, or driving an injection. The techniques are ordinary; the speed and tireless retry are not.",
+      ids: [["T1190","Exploit Public-Facing App"],["T1110.004","Credential Stuffing"],["T1078","Valid Accounts"]],
+      detect: "Failed-then-successful auth bursts, error-rate spikes, and injection-shaped inputs arriving faster and more regularly than human traffic.",
+      defense: "Close the boring doors first: multifactor and credential-stuffing protection on auth, rate limiting on APIs, parameterized queries and input validation on inputs.",
+      reading: [["Your Agent Can Act", REPO+"posts/2026-10-04_agent-tools-trust-boundary.md"],["UNION-based SQLi", REPO+"security-basics/union-based-sqli.md"]]
+    },
+    {
+      name: "Foothold and verification",
+      phase: "ATT&CK: Privilege Escalation (TA0004) / Lateral Movement (TA0008)",
+      agent: "With access, the agent confirms the foothold, escalates where it can, and moves to reach what it wants. It verifies each step before continuing, so dead ends are dropped quickly.",
+      ids: [["T1068","Exploitation for Priv Esc"],["T1078","Valid Accounts"],["T1021","Remote Services"]],
+      detect: "Unusual process spawns, service account activity out of pattern, and internal access that crosses segments it never should.",
+      defense: "Least privilege and segmentation. A foothold that cannot read beyond its own box turns a breach into an incident, not a headline.",
+      reading: [["Your Agent Can Act", REPO+"posts/2026-10-04_agent-tools-trust-boundary.md"]]
+    },
+    {
+      name: "Exfiltration and impact",
+      phase: "ATT&CK: Exfiltration (TA0010)",
+      agent: "The agent collects and moves the data out, often over an ordinary web channel to blend in. Automated collection means it takes everything it can reach, not just a sample.",
+      ids: [["T1567","Exfil Over Web Service"],["T1041","Exfil Over C2 Channel"],["T1020","Automated Exfiltration"]],
+      detect: "Egress-volume anomalies against a baseline, data moving to new destinations, and transfers at machine speed and regularity.",
+      defense: "Egress monitoring and DLP, plus logging good enough to notice a bulk read. You cannot stop what you never watched leave.",
+      reading: [["ARTEX and the Dual-Use Problem", REPO+"posts/2026-10-10_artex-dual-use.md"]]
+    }
+  ];
+
+  var current = 0;
+  var view = "attacker";
+
+  var stagesEl = document.getElementById("stages");
+  var blocksEl = document.getElementById("p-blocks");
+  var nameEl = document.getElementById("p-name");
+  var phaseEl = document.getElementById("p-phase");
+  var hintEl = document.getElementById("viewHint");
+  var root = document.documentElement;
+
+  function buildStages() {
+    STAGES.forEach(function (s, i) {
+      var li = document.createElement("li");
+      var btn = document.createElement("button");
+      btn.className = "stage";
+      btn.type = "button";
+      btn.setAttribute("role", "tab");
+      btn.setAttribute("aria-current", i === current ? "true" : "false");
+      btn.setAttribute("aria-selected", i === current ? "true" : "false");
+      btn.dataset.index = i;
+      btn.innerHTML =
+        '<span class="num">' + (i + 1) + '</span>' +
+        '<span class="name">' + s.name + '</span>' +
+        '<span class="tactic">' + s.phase + '</span>';
+      btn.addEventListener("click", function () { select(i); });
+      btn.addEventListener("keydown", onKey);
+      li.appendChild(btn);
+      stagesEl.appendChild(li);
+    });
+    var loop = document.createElement("li");
+    loop.className = "loopback";
+    loop.setAttribute("aria-hidden", "true");
+    loop.textContent = "↺  the loop repeats — findings feed the next pass";
+    stagesEl.appendChild(loop);
+  }
+
+  function onKey(e) {
+    var i = parseInt(e.currentTarget.dataset.index, 10);
+    if (e.key === "ArrowDown" || e.key === "ArrowRight") { e.preventDefault(); select((i + 1) % STAGES.length, true); }
+    else if (e.key === "ArrowUp" || e.key === "ArrowLeft") { e.preventDefault(); select((i - 1 + STAGES.length) % STAGES.length, true); }
+  }
+
+  function esc(str) {
+    return String(str).replace(/[&<>]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]; });
+  }
+
+  function renderPanel() {
+    var s = STAGES[current];
+    nameEl.textContent = s.name;
+    phaseEl.textContent = s.phase;
+
+    var idsHtml = s.ids.map(function (p) {
+      return '<span class="id"><b>' + esc(p[0]) + '</b> ' + esc(p[1]) + '</span>';
+    }).join("");
+    var readHtml = s.reading.map(function (r) {
+      return '<a href="' + r[1] + '" target="_blank" rel="noopener">' + esc(r[0]) + ' ↗</a>';
+    }).join("");
+
+    blocksEl.innerHTML =
+      '<div class="block agent"><h3>What the agent does</h3><p>' + esc(s.agent) + '</p></div>' +
+      '<div class="block attack-ids"><h3>ATT&CK techniques</h3><div class="ids">' + idsHtml + '</div></div>' +
+      '<div class="block detect"><h3>Detection opportunity</h3><p>' + esc(s.detect) + '</p></div>' +
+      '<div class="block defense"><h3>Defense</h3><p>' + esc(s.defense) + '</p></div>' +
+      '<div class="block reading-block"><h3>Related reading</h3><div class="reading">' + readHtml + '</div></div>';
+  }
+
+  function select(i, focus) {
+    current = i;
+    var btns = stagesEl.querySelectorAll(".stage");
+    btns.forEach(function (b, idx) {
+      var on = idx === i;
+      b.setAttribute("aria-current", on ? "true" : "false");
+      b.setAttribute("aria-selected", on ? "true" : "false");
+      if (on && focus) b.focus();
+    });
+    renderPanel();
+  }
+
+  function setView(v) {
+    view = v;
+    root.setAttribute("data-view", v);
+    document.querySelectorAll("[data-view-btn]").forEach(function (b) {
+      b.setAttribute("aria-pressed", b.dataset.viewBtn === v ? "true" : "false");
+    });
+    hintEl.textContent = v === "attacker"
+      ? "Attacker view: what the agent does at each stage."
+      : "Defender view: detection and defense come first.";
+  }
+
+  document.querySelectorAll("[data-view-btn]").forEach(function (b) {
+    b.addEventListener("click", function () { setView(b.dataset.viewBtn); });
+  });
+
+  buildStages();
+  setView("attacker");
+  select(0);
+</script>
