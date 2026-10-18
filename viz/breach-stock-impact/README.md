@@ -1,11 +1,13 @@
 # Breach Stock Impact
 
 An event study of what a public company's share price does after it discloses a
-major cyber incident. For each incident we fit a market model (alpha + beta against
-a broad index) over a pre-event window, then measure the **abnormal return** around
-the disclosure date, so broad market moves are stripped out. The headline line is
-the cumulative abnormal return (CAR), and the average across incidents is the
-cumulative average abnormal return (CAAR).
+major cyber incident, comparing the US and Japan. For each incident we fit a market
+model (alpha + beta against its home index) over a pre-event window, then measure the
+**abnormal return** around the disclosure date, so broad market moves are stripped
+out. The headline line is the cumulative abnormal return (CAR), and the average across
+each market's incidents is the cumulative average abnormal return (CAAR). Across the
+sample, US disclosures reprice harder (about −13% by day +30) than Japanese ones
+(about −3%).
 
 Third piece in the **Red Team, Visualized** series.
 
@@ -22,7 +24,8 @@ Third piece in the **Red Team, Visualized** series.
   to zero the day before disclosure so the end value is the post-event CAR.
 - **CAAR**: the average AR per relative day across all incidents, cumulated.
 - **day 0**: the first trading day on or after the public disclosure date.
-- **Benchmark**: S&P 500 (`^GSPC`).
+- **Benchmarks**: each incident against its home index — S&P 500 (`^GSPC`) for US
+  names, Nikkei 225 (`^N225`) for Japanese names (`NNNN.T` tickers).
 
 ## How it's built
 

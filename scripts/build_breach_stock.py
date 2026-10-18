@@ -26,21 +26,31 @@ import urllib.parse
 import urllib.request
 
 # --- incidents -------------------------------------------------------------
-# name, ticker, sector, public disclosure date (market-reaction reference).
-# All dates are public. day0 is resolved to the first trading day >= disclosure.
+# name, ticker, sector, public disclosure date, region. All dates are public
+# (filings and reporting); day0 is the first trading day >= disclosure. Each
+# incident is measured against its home-market benchmark (see BENCHMARKS).
 INCIDENTS = [
-    ("Equifax",            "EFX", "Financial data", "2017-09-07"),
-    ("Target",             "TGT", "Retail",         "2013-12-19"),
-    ("Marriott",           "MAR", "Hospitality",    "2018-11-30"),
-    ("Capital One",        "COF", "Banking",        "2019-07-29"),
-    ("Progress (MOVEit)",  "PRGS","Software",       "2023-05-31"),
-    ("Okta",               "OKTA","Identity",       "2022-03-22"),
-    ("MGM Resorts",        "MGM", "Hospitality",    "2023-09-11"),
-    ("Clorox",             "CLX", "Consumer goods", "2023-08-14"),
-    ("UnitedHealth/Change","UNH", "Healthcare",     "2024-02-22"),
+    # United States (vs S&P 500)
+    ("Equifax",            "EFX",   "Financial data", "2017-09-07", "US"),
+    ("Target",             "TGT",   "Retail",         "2013-12-19", "US"),
+    ("Marriott",           "MAR",   "Hospitality",    "2018-11-30", "US"),
+    ("Capital One",        "COF",   "Banking",        "2019-07-29", "US"),
+    ("Progress (MOVEit)",  "PRGS",  "Software",       "2023-05-31", "US"),
+    ("Okta",               "OKTA",  "Identity",       "2022-03-22", "US"),
+    ("MGM Resorts",        "MGM",   "Hospitality",    "2023-09-11", "US"),
+    ("Clorox",             "CLX",   "Consumer goods", "2023-08-14", "US"),
+    ("UnitedHealth/Change","UNH",   "Healthcare",     "2024-02-22", "US"),
+    # Japan (vs Nikkei 225)
+    ("Capcom",             "9697.T","Games",          "2020-11-02", "JP"),
+    ("KADOKAWA",           "9468.T","Media",          "2024-06-08", "JP"),
+    ("Toyota",             "7203.T","Automotive",     "2022-02-28", "JP"),
+    ("Honda",              "7267.T","Automotive",     "2020-06-08", "JP"),
+    ("Mitsubishi Electric","6503.T","Electronics",    "2020-01-20", "JP"),
+    ("Fujitsu",            "6702.T","IT services",    "2021-05-26", "JP"),
+    ("Casio",              "6952.T","Electronics",    "2024-10-07", "JP"),
 ]
 
-BENCHMARK = "^GSPC"          # S&P 500 as the market proxy
+BENCHMARKS = {"US": "^GSPC", "JP": "^N225"}  # home-market proxy per region
 EST_START, EST_END = -250, -11   # estimation window (trading days rel. to day0)
 PRE, POST = -10, 30              # event window (trading days rel. to day0)
 
@@ -93,12 +103,13 @@ def ols(xs, ys):
     return alpha, beta
 
 
-def study_one(name, ticker, sector, disclosure):
+def study_one(name, ticker, sector, disclosure, region):
     d = dt.date.fromisoformat(disclosure)
-    # Wide fetch window: ~400 calendar days before, ~60 after.
+    benchmark = BENCHMARKS[region]
+    # Wide fetch window: ~430 calendar days before, ~60 after.
     stock = fetch_prices(ticker, d - dt.timedelta(days=430),
                          d + dt.timedelta(days=60))
-    mkt = fetch_prices(BENCHMARK, d - dt.timedelta(days=430),
+    mkt = fetch_prices(benchmark, d - dt.timedelta(days=430),
                        d + dt.timedelta(days=60))
     days = sorted(set(stock) & set(mkt))
     rs = daily_returns(stock, days)
@@ -138,7 +149,8 @@ def study_one(name, ticker, sector, disclosure):
                      "car": round(caar * 100, 3)})
 
     return {
-        "name": name, "ticker": ticker, "sector": sector,
+        "name": name, "ticker": ticker, "sector": sector, "region": region,
+        "benchmark": benchmark,
         "disclosure": disclosure, "day0": day0.isoformat(),
         "beta": round(beta, 2),
         "car": car_marks,
@@ -146,31 +158,15 @@ def study_one(name, ticker, sector, disclosure):
     }
 
 
-def main():
-    incidents = []
-    for name, ticker, sector, disclosure in INCIDENTS:
-        print(f"... {ticker} ({disclosure})", flush=True)
-        for attempt in range(3):
-            try:
-                incidents.append(study_one(name, ticker, sector, disclosure))
-                break
-            except Exception as e:  # noqa: BLE001 - keep building the rest
-                print(f"    retry {attempt+1}: {type(e).__name__}: {e}")
-                time.sleep(2)
-        else:
-            print(f"    SKIP {ticker}: failed after retries")
-
-    # cumulative average abnormal return (CAAR): average AR per relative day,
-    # then cumulate. Only days present in every incident are averaged.
+def average(group):
+    """CAAR for a list of incidents: mean AR per relative day, then cumulate.
+    Only relative days present in every incident of the group are used."""
     by_day = {}
-    for inc in incidents:
+    for inc in group:
         for p in inc["path"]:
             by_day.setdefault(p["d"], []).append(p["ar"])
-    n = len(incidents)
-    avg_path = []
-    caar = 0.0
-    car_marks = {}
-    car_from0 = 0.0
+    n = len(group)
+    path, caar, car_from0, marks = [], 0.0, 0.0, {}
     for k in range(PRE, POST + 1):
         vals = by_day.get(k, [])
         if len(vals) != n:
@@ -180,20 +176,45 @@ def main():
         if k >= 0:
             car_from0 += mean_ar
         if k in (1, 5, 20, 30):
-            car_marks[f"d{k}"] = round(car_from0, 2)
-        avg_path.append({"d": k, "ar": round(mean_ar, 3),
-                         "caar": round(caar, 3)})
+            marks[f"d{k}"] = round(car_from0, 2)
+        path.append({"d": k, "ar": round(mean_ar, 3), "caar": round(caar, 3)})
+    return {"count": n, "path": path, "car": marks}
+
+
+def main():
+    incidents = []
+    for name, ticker, sector, disclosure, region in INCIDENTS:
+        print(f"... {ticker} ({region}, {disclosure})", flush=True)
+        for attempt in range(3):
+            try:
+                incidents.append(
+                    study_one(name, ticker, sector, disclosure, region))
+                break
+            except Exception as e:  # noqa: BLE001 - keep building the rest
+                print(f"    retry {attempt+1}: {type(e).__name__}: {e}")
+                time.sleep(2)
+        else:
+            print(f"    SKIP {ticker}: failed after retries")
+
+    us = [i for i in incidents if i["region"] == "US"]
+    jp = [i for i in incidents if i["region"] == "JP"]
+    averages = {"ALL": average(incidents)}
+    if us:
+        averages["US"] = average(us)
+    if jp:
+        averages["JP"] = average(jp)
 
     data = {
         "generatedAt": dt.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
-        "benchmark": BENCHMARK,
+        "benchmarks": BENCHMARKS,
         "model": ("market model: AR = R_stock - (alpha + beta * R_market), "
-                  f"estimation window [{EST_START},{EST_END}] trading days"),
+                  f"estimation window [{EST_START},{EST_END}] trading days, "
+                  "each incident vs its home-market benchmark"),
         "eventWindow": {"pre": PRE, "post": POST},
         "note": ("Public data only. Education / analysis, not investment advice. "
                  "Correlation is not causation."),
         "incidents": incidents,
-        "average": {"count": n, "path": avg_path, "car": car_marks},
+        "averages": averages,
     }
 
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
@@ -201,9 +222,10 @@ def main():
         json.dump(data, f, indent=2)
         f.write("\n")
     print(f"\nwrote {OUT}")
-    print(f"incidents={n} "
-          f"avgCAR[0,+30]={car_marks.get('d30')}% "
-          f"benchmark={BENCHMARK}")
+    print(f"incidents={len(incidents)} (US={len(us)}, JP={len(jp)})")
+    for key in ("ALL", "US", "JP"):
+        if key in averages:
+            print(f"  {key}: CAR[0,+30]={averages[key]['car'].get('d30')}%")
 
 
 if __name__ == "__main__":

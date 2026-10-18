@@ -39,7 +39,7 @@ Interactive, self-contained visualizations built on public frameworks and public
 |-------|---------------|------|--------|
 | The Agentic Kill-Chain | The autonomous offensive loop, stage by stage, with ATT&CK mappings, detection, and defenses | [Pages](https://xingelf.github.io/agentic-redteam/viz/agentic-kill-chain/) | [viz/agentic-kill-chain](viz/agentic-kill-chain/) |
 | Known Exploited Vulnerabilities | Self-updating CISA KEV dashboard — totals, monthly additions, top vendors, newest entries (refreshed daily by GitHub Actions) | [Pages](https://xingelf.github.io/agentic-redteam/viz/kev-dashboard/) | [viz/kev-dashboard](viz/kev-dashboard/) |
-| What a Breach Costs the Share Price | Event study of nine public-company incidents — abnormal returns and CAR around disclosure, stripped of market moves | [Pages](https://xingelf.github.io/agentic-redteam/viz/breach-stock-impact/) | [viz/breach-stock-impact](viz/breach-stock-impact/) |
+| What a Breach Costs the Share Price | Event study of 16 public-company incidents (US vs Japan) — abnormal returns and CAR around disclosure, stripped of market moves | [Pages](https://xingelf.github.io/agentic-redteam/viz/breach-stock-impact/) | [viz/breach-stock-impact](viz/breach-stock-impact/) |
 
 ## Tools
 

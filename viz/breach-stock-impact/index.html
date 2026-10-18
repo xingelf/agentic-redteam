@@ -6,8 +6,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
 <style>
-  /* Event study of public-company cyber incidents. Market-model abnormal returns
-     and CAR around disclosure. Data fetched at load from ./data.json. */
+  /* Event study of public-company cyber incidents, US vs Japan. Market-model
+     abnormal returns and CAR around disclosure. Data fetched from ./data.json. */
   :root {
     --bg: #e7e6e2; --surface: #f2f1ed; --surface-2: #dddbd4;
     --fg: #222528; --muted: #6a6d72; --line: #c9c7c0;
@@ -59,32 +59,39 @@
   .tile { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 1rem 1.1rem; min-width: 0; }
   .tile .k { font-family: var(--mono); font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
   .tile .v { font-family: var(--display); font-size: clamp(1.7rem, 4.5vw, 2.4rem); line-height: 1.1; margin-top: .25rem; }
-  .tile.crit { border-color: color-mix(in srgb, var(--critical) 55%, var(--line)); }
-  .tile.crit .v { color: var(--critical); }
+  .tile.us { border-color: color-mix(in srgb, var(--accent) 55%, var(--line)); }
+  .tile.us .v { color: var(--accent); }
+  .tile.jp { border-color: color-mix(in srgb, var(--data) 55%, var(--line)); }
+  .tile.jp .v { color: var(--data); }
   .tile .sub { font-size: .76rem; color: var(--muted); margin-top: .15rem; }
 
   .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.1rem 1.2rem; min-width: 0; margin-bottom: 1.1rem; }
   .card h2 { font-family: var(--display); font-weight: 500; font-size: 1.2rem; margin: 0 0 .2rem; letter-spacing: -.01em; }
-  .card .cap { font-size: .78rem; color: var(--muted); margin: 0 0 1rem; max-width: 70ch; }
+  .card .cap { font-size: .78rem; color: var(--muted); margin: 0 0 1rem; max-width: 72ch; }
+
+  .legend { display: flex; gap: 1.2rem; margin: 0 0 .7rem; font-size: .82rem; flex-wrap: wrap; }
+  .legend .key { display: inline-flex; align-items: center; gap: .4rem; color: var(--fg); }
+  .legend i { width: 16px; height: 3px; border-radius: 2px; display: inline-block; }
 
   svg { display: block; width: 100%; height: auto; overflow: visible; }
   .grid-line { stroke: var(--line); stroke-width: 1; }
   .zero-line { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 2 3; opacity: .6; }
-  .event-line { stroke: var(--accent); stroke-width: 1; stroke-dasharray: 3 3; opacity: .8; }
+  .event-line { stroke: var(--accent); stroke-width: 1; stroke-dasharray: 3 3; opacity: .7; }
   .axis-text { fill: var(--muted); font-family: var(--mono); font-size: 10px; }
-  .caar-line { fill: none; stroke: var(--critical); stroke-width: 2; }
-  .caar-area { fill: var(--critical); opacity: .08; }
-  .hover-dot { fill: var(--critical); stroke: var(--surface); stroke-width: 2; }
+  .end-label { font-family: var(--mono); font-size: 11px; font-weight: 500; }
+  .hover-dot { stroke: var(--surface); stroke-width: 2; }
   .hover-x { stroke: var(--muted); stroke-width: 1; opacity: .5; }
 
-  /* ranked magnitude bars */
+  /* diverging magnitude bars (loss vs gain around a zero line) */
   .bars { display: flex; flex-direction: column; gap: .5rem; }
-  .brow { display: grid; grid-template-columns: 9.5rem 1fr 4rem; align-items: center; gap: .6rem; font-size: .84rem; }
+  .brow { display: grid; grid-template-columns: 10.5rem 1fr 4.2rem; align-items: center; gap: .6rem; font-size: .84rem; }
   .brow .bname { color: var(--fg); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .brow .bname small { color: var(--muted); font-family: var(--mono); font-size: .72rem; }
+  .brow .bname small { color: var(--muted); font-family: var(--mono); font-size: .7rem; border: 1px solid var(--line); border-radius: 4px; padding: 0 .3rem; margin-left: .2rem; }
   .brow .btrack { position: relative; height: 14px; }
-  .brow .bbar { position: absolute; left: 0; top: 0; height: 14px; background: var(--data); border-radius: 3px; min-width: 2px; }
-  .brow .bval { font-family: var(--mono); font-size: .8rem; color: var(--critical); text-align: right; }
+  .brow .bzero { position: absolute; left: 50%; top: -3px; bottom: -3px; width: 1px; background: var(--line); }
+  .brow .bbar { position: absolute; top: 0; height: 14px; min-width: 2px; }
+  .brow .bval { font-family: var(--mono); font-size: .8rem; text-align: right; }
+  .bval.neg { color: var(--critical); } .bval.pos { color: var(--data); }
 
   /* small multiples */
   .sparks { display: grid; grid-template-columns: repeat(3, 1fr); gap: .9rem; }
@@ -95,28 +102,30 @@
   .spark .sname { font-weight: 600; font-size: .9rem; }
   .spark .sticker { font-family: var(--mono); font-size: .7rem; color: var(--muted); }
   .spark .ssec { font-size: .72rem; color: var(--muted); }
-  .spark .sval { font-family: var(--mono); font-size: .82rem; color: var(--critical); }
+  .spark .sval { font-family: var(--mono); font-size: .82rem; }
+  .spark .sval.neg { color: var(--critical); } .spark .sval.pos { color: var(--data); }
   .spark svg { margin-top: .3rem; }
-  .spark-line { fill: none; stroke: var(--critical); stroke-width: 1.5; }
+  .spark-line { fill: none; stroke-width: 1.5; }
 
   .table-card .cap { margin-bottom: .6rem; }
   .table-scroll { overflow-x: auto; }
-  table { border-collapse: collapse; width: 100%; font-size: .85rem; min-width: 620px; }
+  table { border-collapse: collapse; width: 100%; font-size: .85rem; min-width: 680px; }
   th, td { text-align: right; padding: .5rem .6rem; border-bottom: 1px solid var(--line); vertical-align: top; }
   th:first-child, td:first-child, th.l, td.l { text-align: left; }
   th { font-family: var(--mono); font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
   td.name strong { font-weight: 600; }
   td.name small { color: var(--muted); font-family: var(--mono); display: block; }
   td.date { font-family: var(--mono); color: var(--muted); white-space: nowrap; }
+  td.tag { font-family: var(--mono); font-size: .72rem; color: var(--muted); }
   td.num { font-family: var(--mono); }
-  td.neg { color: var(--critical); }
+  td.neg { color: var(--critical); } td.pos { color: var(--data); }
 
   .state { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 2rem 1.2rem; text-align: center; color: var(--muted); }
 
   footer { margin-top: 2.4rem; border-top: 1px solid var(--line); padding-top: 1rem; color: var(--muted); font-size: .8rem; }
   footer a { color: var(--accent); text-decoration: none; }
   footer a:hover { text-decoration: underline; }
-  footer p { margin: .3rem 0; max-width: 72ch; }
+  footer p { margin: .3rem 0; max-width: 74ch; }
 
   .tooltip { position: fixed; pointer-events: none; background: var(--fg); color: var(--bg); font-family: var(--mono); font-size: .72rem; padding: .3rem .5rem; border-radius: 6px; opacity: 0; transition: opacity .1s; z-index: 20; white-space: nowrap; }
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
@@ -126,40 +135,41 @@
   <header>
     <p class="eyebrow">Red Team, Visualized &middot; 03</p>
     <h1>What a Breach Costs the Share Price</h1>
-    <p class="dek">When a public company discloses a major cyber incident, does the market punish it &mdash; and for how long? This is an event study: for each incident we model the stock's normal relationship to the market, then measure the <em>abnormal</em> return around the disclosure date, so a general market rally or sell-off is stripped out. The line that matters is the cumulative abnormal return (CAR).</p>
+    <p class="dek">When a public company discloses a major cyber incident, does the market punish it &mdash; and does it matter which market? This is an event study of sixteen incidents, nine in the US and seven in Japan. For each one we model the stock's normal relationship to its home index, then measure the <em>abnormal</em> return around the disclosure date, so a general market move is stripped out. The headline is the cumulative abnormal return (CAR).</p>
     <p class="asof" id="asof">Loading&hellip;</p>
-    <p class="note">Public data only &mdash; prices from a public market data API, disclosure dates from filings and reporting. Education and analysis, not investment advice. These are well-known, severe incidents chosen on purpose, so they are not a random sample; correlation is not causation.</p>
+    <p class="note">Public data only &mdash; prices from a public market data API, disclosure dates from filings and reporting. Education and analysis, not investment advice. These are well-known, severe incidents chosen on purpose, so they are not a random sample; correlation is not causation, and a single incident's window can be swamped by unrelated news.</p>
   </header>
 
   <div id="content" hidden>
     <div class="tiles" id="tiles"></div>
 
     <section class="card">
-      <h2>Average cumulative abnormal return</h2>
+      <h2>Average cumulative abnormal return &mdash; US vs Japan</h2>
       <p class="cap" id="caarCap"></p>
+      <div class="legend" id="caarLegend"></div>
       <div id="caarChart"></div>
     </section>
 
     <section class="card">
       <h2>Abnormal return by day +30</h2>
-      <p class="cap">Each incident's cumulative abnormal return over the 30 trading days after disclosure. Longer bar = larger drop.</p>
+      <p class="cap">Each incident's cumulative abnormal return over the 30 trading days after disclosure. Bars left of the line are losses; a few land right of it &mdash; the market shrugged, or other news dominated the window.</p>
       <div class="bars" id="bars"></div>
     </section>
 
     <section class="card">
       <h2>Each incident, indexed to the disclosure</h2>
-      <p class="cap">Cumulative abnormal return from day &minus;10 to +30 trading days, set to zero the day before disclosure. The vertical line is day&nbsp;0.</p>
+      <p class="cap">Cumulative abnormal return from day &minus;10 to +30 trading days, set to zero the day before disclosure. The vertical line is day&nbsp;0. US lines in blue, Japan in green.</p>
       <div class="sparks" id="sparks"></div>
     </section>
 
     <section class="card table-card">
       <h2>The numbers</h2>
-      <p class="cap">CAR measured from disclosure day (day 0), in percent. Beta is the stock's market sensitivity from the estimation window.</p>
+      <p class="cap">CAR measured from disclosure day (day 0), in percent. Beta is the stock's sensitivity to its home index from the estimation window.</p>
       <div class="table-scroll">
         <table>
           <thead>
             <tr>
-              <th class="l">Company</th><th class="l">Sector</th><th class="l">Disclosed</th>
+              <th class="l">Company</th><th class="l">Market</th><th class="l">Sector</th><th class="l">Disclosed</th>
               <th>Beta</th><th>CAR +1</th><th>CAR +5</th><th>CAR +20</th><th>CAR +30</th>
             </tr>
           </thead>
@@ -173,7 +183,7 @@
   <div id="error" class="state" hidden>Could not load <code>data.json</code>. If you opened this file directly, serve the folder over HTTP so the fetch can resolve.</div>
 
   <footer>
-    <p>Method: market-model event study. For each incident, AR = R<sub>stock</sub> &minus; (&alpha; + &beta;&middot;R<sub>market</sub>), with &alpha; and &beta; estimated over a pre-event window; CAR is the running sum. The average line is the cumulative average abnormal return (CAAR). Benchmark: <span id="benchName">S&amp;P 500</span>.</p>
+    <p>Method: market-model event study. For each incident, AR = R<sub>stock</sub> &minus; (&alpha; + &beta;&middot;R<sub>market</sub>), with &alpha; and &beta; estimated over a pre-event window; CAR is the running sum. The average line is the cumulative average abnormal return (CAAR). Benchmarks: S&amp;P 500 (US), Nikkei 225 (Japan) &mdash; each incident against its home index.</p>
     <p>Prices: public market data API (adjusted close). Disclosure dates: public filings and reporting. No client, target, or engagement data. Not investment advice.</p>
     <p>Part of the <em>Red Team, Visualized</em> series &middot; <a href="https://github.com/xingelf/agentic-redteam" target="_blank" rel="noopener">github.com/xingelf/agentic-redteam</a></p>
   </footer>
@@ -182,6 +192,9 @@
 <div class="tooltip" id="tip"></div>
 
 <script>
+  var COLORS = { US: "var(--accent)", JP: "var(--data)" };
+  var REGION = { US: "United States", JP: "Japan" };
+
   var tip = document.getElementById("tip");
   function showTip(e, text) {
     tip.innerHTML = text;
@@ -192,6 +205,7 @@
   function hideTip() { tip.style.opacity = "0"; }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
   function sgn(n) { return (n > 0 ? "+" : "") + n.toFixed(2) + "%"; }
+  function cls(n) { return n < 0 ? "neg" : "pos"; }
 
   // Re-baseline a path so the day before disclosure (d = -1) sits at zero,
   // which makes the end-of-window value equal the reported CAR from day 0.
@@ -202,42 +216,46 @@
   }
 
   function niceTicks(min, max) {
-    var ticks = [];
     var lo = Math.floor(min / 5) * 5, hi = Math.ceil(max / 5) * 5;
-    var step = (hi - lo) > 40 ? 10 : 5;
+    if (lo === hi) { hi = lo + 5; }
+    var step = (hi - lo) > 40 ? 10 : 5, ticks = [];
     for (var t = lo; t <= hi + 0.001; t += step) ticks.push(t);
     return { ticks: ticks, lo: lo, hi: hi };
   }
 
   function renderTiles(d) {
-    var a = d.average;
-    var worst = d.incidents.slice().sort(function (x, y) { return x.car.d30 - y.car.d30; })[0];
-    var negCount = d.incidents.filter(function (i) { return i.car.d30 < 0; }).length;
+    var us = d.averages.US, jp = d.averages.JP;
+    var gap = (us.car.d30 - jp.car.d30);
     var tiles = [
-      { k: "Incidents studied", v: String(d.incidents.length), sub: "public companies" },
-      { k: "Avg CAR, +30 days", v: sgn(a.car.d30), sub: "cumulative average", crit: true },
-      { k: "Negative by +30", v: negCount + " of " + d.incidents.length, sub: "stocks underperformed" },
-      { k: "Worst case", v: sgn(worst.car.d30), sub: worst.name + " (" + worst.ticker + ")", crit: true }
+      { k: "Incidents studied", v: String(d.incidents.length), sub: us.count + " US · " + jp.count + " Japan" },
+      { k: "US avg, +30 days", v: sgn(us.car.d30), sub: "vs S&P 500", cl: "us" },
+      { k: "Japan avg, +30 days", v: sgn(jp.car.d30), sub: "vs Nikkei 225", cl: "jp" },
+      { k: "US − Japan gap", v: Math.abs(gap).toFixed(1) + " pts", sub: "US markets reprice harder" }
     ];
     document.getElementById("tiles").innerHTML = tiles.map(function (t) {
-      return '<div class="tile' + (t.crit ? " crit" : "") + '"><div class="k">' + esc(t.k) + '</div>' +
+      return '<div class="tile ' + (t.cl || "") + '"><div class="k">' + esc(t.k) + '</div>' +
         '<div class="v">' + esc(t.v) + '</div>' + (t.sub ? '<div class="sub">' + esc(t.sub) + '</div>' : '') + '</div>';
     }).join("");
   }
 
   function renderCaar(d) {
-    var pts = rebased(d.average.path, "caar");
-    var W = 720, H = 300, padL = 40, padR = 16, padT = 14, padB = 34;
+    var series = ["US", "JP"].filter(function (k) { return d.averages[k]; }).map(function (k) {
+      return { key: k, label: REGION[k], color: COLORS[k], pts: rebased(d.averages[k].path, "caar") };
+    });
+    document.getElementById("caarLegend").innerHTML = series.map(function (s) {
+      return '<span class="key"><i style="background:' + s.color + '"></i>' + esc(s.label) +
+        ' (n=' + d.averages[s.key].count + ')</span>';
+    }).join("");
+
+    var W = 720, H = 300, padL = 40, padR = 54, padT = 14, padB = 34;
     var plotW = W - padL - padR, plotH = H - padT - padB;
-    var xs = pts.map(function (p) { return p.d; });
-    var dmin = Math.min.apply(null, xs), dmax = Math.max.apply(null, xs);
-    var vmin = Math.min.apply(null, pts.map(function (p) { return p.v; }));
-    var vmax = Math.max.apply(null, pts.map(function (p) { return p.v; }));
-    var nt = niceTicks(Math.min(vmin, 0), Math.max(vmax, 0));
-    var lo = nt.lo, hi = nt.hi;
+    var allV = [0], allD = [];
+    series.forEach(function (s) { s.pts.forEach(function (p) { allV.push(p.v); allD.push(p.d); }); });
+    var dmin = Math.min.apply(null, allD), dmax = Math.max.apply(null, allD);
+    var nt = niceTicks(Math.min.apply(null, allV), Math.max.apply(null, allV));
 
     function xF(dd) { return padL + (dd - dmin) / (dmax - dmin) * plotW; }
-    function yF(v) { return padT + plotH - (v - lo) / (hi - lo) * plotH; }
+    function yF(v) { return padT + plotH - (v - nt.lo) / (nt.hi - nt.lo) * plotH; }
 
     var grid = nt.ticks.map(function (t) {
       var y = yF(t);
@@ -247,25 +265,24 @@
 
     var xticks = [-10, -5, 0, 5, 10, 15, 20, 25, 30].filter(function (t) { return t >= dmin && t <= dmax; });
     var xlabels = xticks.map(function (t) {
-      var x = xF(t);
-      return '<text class="axis-text" x="' + x.toFixed(1) + '" y="' + (H - 8) + '" text-anchor="middle">' + (t > 0 ? "+" + t : t) + '</text>';
+      return '<text class="axis-text" x="' + xF(t).toFixed(1) + '" y="' + (H - 8) + '" text-anchor="middle">' + (t > 0 ? "+" + t : t) + '</text>';
     }).join("");
 
     var evX = xF(0);
     var evLine = '<line class="event-line" x1="' + evX + '" y1="' + padT + '" x2="' + evX + '" y2="' + (padT + plotH) + '"/>' +
       '<text class="axis-text" x="' + (evX + 4) + '" y="' + (padT + 10) + '" text-anchor="start" fill="var(--accent)">disclosure</text>';
 
-    var line = pts.map(function (p, i) { return (i ? "L" : "M") + xF(p.d).toFixed(1) + " " + yF(p.v).toFixed(1); }).join(" ");
-    var area = "M" + xF(pts[0].d).toFixed(1) + " " + yF(0).toFixed(1) + " " +
-      pts.map(function (p) { return "L" + xF(p.d).toFixed(1) + " " + yF(p.v).toFixed(1); }).join(" ") +
-      " L" + xF(pts[pts.length - 1].d).toFixed(1) + " " + yF(0).toFixed(1) + " Z";
+    var lines = series.map(function (s) {
+      var dPath = s.pts.map(function (p, i) { return (i ? "L" : "M") + xF(p.d).toFixed(1) + " " + yF(p.v).toFixed(1); }).join(" ");
+      var end = s.pts[s.pts.length - 1];
+      return '<path d="' + dPath + '" fill="none" stroke="' + s.color + '" stroke-width="2"/>' +
+        '<circle cx="' + xF(end.d).toFixed(1) + '" cy="' + yF(end.v).toFixed(1) + '" r="3" fill="' + s.color + '"/>' +
+        '<text class="end-label" x="' + (xF(end.d) + 6).toFixed(1) + '" y="' + (yF(end.v) + 4).toFixed(1) + '" fill="' + s.color + '">' + s.key + '</text>';
+    }).join("");
 
     document.getElementById("caarChart").innerHTML =
-      '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Average cumulative abnormal return from day -10 to +30">' +
-      grid + evLine +
-      '<path class="caar-area" d="' + area + '"/>' +
-      '<path class="caar-line" d="' + line + '"/>' +
-      '<g id="caarHover"></g>' + xlabels +
+      '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Average cumulative abnormal return, US vs Japan, day -10 to +30">' +
+      grid + evLine + lines + '<g id="caarHover"></g>' + xlabels +
       '<rect x="' + padL + '" y="' + padT + '" width="' + plotW + '" height="' + plotH + '" fill="transparent" id="caarCapture"/></svg>';
 
     var svg = document.querySelector("#caarChart svg");
@@ -273,70 +290,77 @@
     var hover = svg.querySelector("#caarHover");
     cap.addEventListener("mousemove", function (e) {
       var r = svg.getBoundingClientRect();
-      var px = (e.clientX - r.left) / r.width * W;
-      var dd = Math.round(dmin + (px - padL) / plotW * (dmax - dmin));
+      var dd = Math.round(dmin + ((e.clientX - r.left) / r.width * W - padL) / plotW * (dmax - dmin));
       dd = Math.max(dmin, Math.min(dmax, dd));
-      var p = pts[dd - dmin];
-      if (!p) return;
-      hover.innerHTML = '<line class="hover-x" x1="' + xF(p.d) + '" y1="' + padT + '" x2="' + xF(p.d) + '" y2="' + (padT + plotH) + '"/>' +
-        '<circle class="hover-dot" cx="' + xF(p.d) + '" cy="' + yF(p.v) + '" r="4"/>';
-      showTip(e, "day " + (p.d > 0 ? "+" + p.d : p.d) + "<br>CAAR " + sgn(p.v));
+      var marks = "", lines2 = "<line class='hover-x' x1='" + xF(dd) + "' y1='" + padT + "' x2='" + xF(dd) + "' y2='" + (padT + plotH) + "'/>";
+      var txt = "day " + (dd > 0 ? "+" + dd : dd);
+      series.forEach(function (s) {
+        var p = s.pts[dd - dmin];
+        if (!p) return;
+        marks += "<circle class='hover-dot' cx='" + xF(p.d) + "' cy='" + yF(p.v) + "' r='4' fill='" + s.color + "'/>";
+        txt += "<br>" + s.key + " " + sgn(p.v);
+      });
+      hover.innerHTML = lines2 + marks;
+      showTip(e, txt);
     });
     cap.addEventListener("mouseleave", function () { hover.innerHTML = ""; hideTip(); });
 
     document.getElementById("caarCap").textContent =
-      "Average across " + d.average.count + " incidents, day −10 to +30 trading days. By +30 the average stock sits " +
-      sgn(d.average.car.d30) + " below where its market relationship predicts.";
+      "Average across each market's incidents, day −10 to +30 trading days. By +30 the average US stock sits " +
+      sgn(d.averages.US.car.d30) + " below its predicted value; the average Japanese stock, " +
+      sgn(d.averages.JP.car.d30) + ".";
   }
 
   function renderBars(d) {
     var rows = d.incidents.slice().sort(function (x, y) { return x.car.d30 - y.car.d30; });
-    var max = Math.max.apply(null, rows.map(function (r) { return Math.abs(r.car.d30); })) || 1;
+    var maxAbs = Math.max.apply(null, rows.map(function (r) { return Math.abs(r.car.d30); })) || 1;
     document.getElementById("bars").innerHTML = rows.map(function (r) {
-      var pct = Math.abs(r.car.d30) / max * 100;
+      var v = r.car.d30, w = Math.abs(v) / maxAbs * 50, neg = v < 0;
+      var style = neg
+        ? "right:50%;width:" + w.toFixed(1) + "%;background:var(--critical);border-radius:3px 0 0 3px;"
+        : "left:50%;width:" + w.toFixed(1) + "%;background:var(--data);border-radius:0 3px 3px 0;";
       return '<div class="brow">' +
-        '<span class="bname">' + esc(r.name) + ' <small>' + esc(r.ticker) + '</small></span>' +
-        '<span class="btrack"><span class="bbar" style="width:' + pct.toFixed(1) + '%" title="' + esc(r.name + ": " + sgn(r.car.d30)) + '"></span></span>' +
-        '<span class="bval">' + sgn(r.car.d30) + '</span></div>';
+        '<span class="bname">' + esc(r.name) + ' <small>' + esc(r.region) + '</small></span>' +
+        '<span class="btrack"><span class="bzero"></span>' +
+        '<span class="bbar" style="' + style + '" title="' + esc(r.name + ": " + sgn(v)) + '"></span></span>' +
+        '<span class="bval ' + cls(v) + '">' + sgn(v) + '</span></div>';
     }).join("");
   }
 
   function renderSparks(d) {
     var W = 220, H = 70, padL = 4, padR = 4, padT = 6, padB = 6;
     var plotW = W - padL - padR, plotH = H - padT - padB;
-    // shared y-scale across all sparks for honest comparison
-    var allV = [];
+    var allV = [0];
     d.incidents.forEach(function (inc) { rebased(inc.path, "car").forEach(function (p) { allV.push(p.v); }); });
-    var lo = Math.min.apply(null, allV.concat(0)), hi = Math.max.apply(null, allV.concat(0));
+    var lo = Math.min.apply(null, allV), hi = Math.max.apply(null, allV);
     var pad = (hi - lo) * 0.08 || 1; lo -= pad; hi += pad;
 
-    var html = d.incidents.slice().sort(function (x, y) { return x.car.d30 - y.car.d30; }).map(function (inc) {
-      var pts = rebased(inc.path, "car");
-      var dmin = -10, dmax = 30;
-      function xF(dd) { return padL + (dd - dmin) / (dmax - dmin) * plotW; }
-      function yF(v) { return padT + plotH - (v - lo) / (hi - lo) * plotH; }
-      var zeroY = yF(0), evX = xF(0);
-      var line = pts.map(function (p, i) { return (i ? "L" : "M") + xF(p.d).toFixed(1) + " " + yF(p.v).toFixed(1); }).join(" ");
-      var end = pts[pts.length - 1];
-      var svg = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + esc(inc.name + " CAR " + sgn(inc.car.d30)) + '">' +
-        '<line class="zero-line" x1="' + padL + '" y1="' + zeroY + '" x2="' + (W - padR) + '" y2="' + zeroY + '"/>' +
-        '<line class="event-line" x1="' + evX + '" y1="' + padT + '" x2="' + evX + '" y2="' + (padT + plotH) + '"/>' +
-        '<path class="spark-line" d="' + line + '"/>' +
-        '<circle cx="' + xF(end.d).toFixed(1) + '" cy="' + yF(end.v).toFixed(1) + '" r="2.5" fill="var(--critical)"/></svg>';
-      return '<div class="spark">' +
-        '<div class="st"><span><span class="sname">' + esc(inc.name) + '</span> <span class="sticker">' + esc(inc.ticker) + '</span></span>' +
-        '<span class="sval">' + sgn(inc.car.d30) + '</span></div>' +
-        '<div class="ssec">' + esc(inc.sector) + ' &middot; disclosed ' + esc(inc.disclosure) + '</div>' + svg + '</div>';
-    }).join("");
-    document.getElementById("sparks").innerHTML = html;
+    document.getElementById("sparks").innerHTML = d.incidents.slice()
+      .sort(function (x, y) { return x.car.d30 - y.car.d30; }).map(function (inc) {
+        var pts = rebased(inc.path, "car"), dmin = -10, dmax = 30, color = COLORS[inc.region];
+        function xF(dd) { return padL + (dd - dmin) / (dmax - dmin) * plotW; }
+        function yF(v) { return padT + plotH - (v - lo) / (hi - lo) * plotH; }
+        var line = pts.map(function (p, i) { return (i ? "L" : "M") + xF(p.d).toFixed(1) + " " + yF(p.v).toFixed(1); }).join(" ");
+        var end = pts[pts.length - 1];
+        var svg = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + esc(inc.name + " CAR " + sgn(inc.car.d30)) + '">' +
+          '<line class="zero-line" x1="' + padL + '" y1="' + yF(0) + '" x2="' + (W - padR) + '" y2="' + yF(0) + '"/>' +
+          '<line class="event-line" x1="' + xF(0) + '" y1="' + padT + '" x2="' + xF(0) + '" y2="' + (padT + plotH) + '"/>' +
+          '<path class="spark-line" d="' + line + '" stroke="' + color + '"/>' +
+          '<circle cx="' + xF(end.d).toFixed(1) + '" cy="' + yF(end.v).toFixed(1) + '" r="2.5" fill="' + color + '"/></svg>';
+        return '<div class="spark">' +
+          '<div class="st"><span><span class="sname">' + esc(inc.name) + '</span> <span class="sticker">' + esc(inc.ticker) + '</span></span>' +
+          '<span class="sval ' + cls(inc.car.d30) + '">' + sgn(inc.car.d30) + '</span></div>' +
+          '<div class="ssec">' + esc(REGION[inc.region]) + ' &middot; ' + esc(inc.sector) + ' &middot; ' + esc(inc.disclosure) + '</div>' + svg + '</div>';
+      }).join("");
   }
 
   function renderTable(d) {
     document.getElementById("tableBody").innerHTML = d.incidents.slice()
       .sort(function (x, y) { return x.car.d30 - y.car.d30; }).map(function (r) {
-        function cell(v) { return '<td class="num' + (v < 0 ? " neg" : "") + '">' + sgn(v) + '</td>'; }
+        function cell(v) { return '<td class="num ' + cls(v) + '">' + sgn(v) + '</td>'; }
         return '<tr>' +
           '<td class="l name"><strong>' + esc(r.name) + '</strong><small>' + esc(r.ticker) + '</small></td>' +
+          '<td class="l tag">' + esc(r.region) + '</td>' +
           '<td class="l">' + esc(r.sector) + '</td>' +
           '<td class="l date">' + esc(r.disclosure) + '</td>' +
           '<td class="num">' + r.beta.toFixed(2) + '</td>' +
@@ -345,15 +369,12 @@
       }).join("");
   }
 
-  var benchNames = { "^GSPC": "S&P 500", "^IXIC": "Nasdaq Composite", "^DJI": "Dow Jones" };
-
   fetch("./data.json", { cache: "no-store" })
     .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
     .then(function (d) {
       document.getElementById("asof").innerHTML =
-        "<b>" + d.incidents.length + "</b> incidents &middot; benchmark " + esc(benchNames[d.benchmark] || d.benchmark) +
-        " &middot; snapshot " + esc((d.generatedAt || "").slice(0, 10));
-      document.getElementById("benchName").textContent = benchNames[d.benchmark] || d.benchmark;
+        "<b>" + d.incidents.length + "</b> incidents &middot; " + d.averages.US.count + " US / " + d.averages.JP.count + " Japan" +
+        " &middot; S&P 500 + Nikkei 225 &middot; snapshot " + esc((d.generatedAt || "").slice(0, 10));
       renderTiles(d); renderCaar(d); renderBars(d); renderSparks(d); renderTable(d);
       document.getElementById("loading").hidden = true;
       document.getElementById("content").hidden = false;
