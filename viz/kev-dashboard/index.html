@@ -1,0 +1,273 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>Known Exploited Vulnerabilities</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+  /* Layout: stat tiles, two magnitude charts, a recent-additions table. Data fetched at load from ./data.json. */
+  :root {
+    --bg: #e7e6e2; --surface: #f2f1ed; --surface-2: #dddbd4;
+    --fg: #222528; --muted: #6a6d72; --line: #c9c7c0;
+    --data: #3d6d63; --accent: #45586b; --critical: #99493a;
+    --radius: 10px;
+    --display: "Fraunces", Georgia, serif;
+    --body: "IBM Plex Sans", system-ui, -apple-system, Segoe UI, sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #15171a; --surface: #1c1f23; --surface-2: #23272c;
+      --fg: #e6e5e1; --muted: #9aa0a6; --line: #313640;
+      --data: #6fb3a2; --accent: #8aa0b5; --critical: #c9775f;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #15171a; --surface: #1c1f23; --surface-2: #23272c;
+    --fg: #e6e5e1; --muted: #9aa0a6; --line: #313640;
+    --data: #6fb3a2; --accent: #8aa0b5; --critical: #c9775f;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--fg);
+    font-family: var(--body); line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    font-variant-numeric: tabular-nums;
+  }
+  .wrap {
+    max-width: 1080px; margin: 0 auto;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: clamp(1.5rem, 4vw, 3rem);
+  }
+
+  header { margin-bottom: 1.6rem; }
+  .eyebrow { font-family: var(--mono); font-size: .72rem; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); margin: 0 0 .5rem; }
+  h1 { font-family: var(--display); font-weight: 500; font-size: clamp(1.9rem, 5vw, 3rem); line-height: 1.05; letter-spacing: -.01em; text-wrap: balance; margin: 0 0 .6rem; }
+  .dek { max-width: 64ch; color: var(--muted); font-size: 1.02rem; margin: 0 0 .8rem; }
+  .asof { font-family: var(--mono); font-size: .78rem; color: var(--muted); margin: 0 0 .3rem; }
+  .asof b { color: var(--fg); font-weight: 500; }
+  .note { max-width: 64ch; font-size: .82rem; color: var(--muted); border-left: 2px solid var(--line); padding-left: .75rem; margin: .9rem 0 0; }
+
+  .tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: .8rem; margin: 1.6rem 0; }
+  @media (max-width: 720px) { .tiles { grid-template-columns: repeat(2, 1fr); } }
+  .tile { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 1rem 1.1rem; min-width: 0; }
+  .tile .k { font-family: var(--mono); font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+  .tile .v { font-family: var(--display); font-size: clamp(1.7rem, 4.5vw, 2.4rem); line-height: 1.1; margin-top: .25rem; }
+  .tile.crit { border-color: color-mix(in srgb, var(--critical) 55%, var(--line)); }
+  .tile.crit .v { color: var(--critical); }
+  .tile .sub { font-size: .76rem; color: var(--muted); margin-top: .15rem; }
+
+  .charts { display: grid; grid-template-columns: 1.3fr 1fr; gap: 1.1rem; }
+  @media (max-width: 820px) { .charts { grid-template-columns: 1fr; } }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.1rem 1.2rem; min-width: 0; }
+  .card h2 { font-family: var(--display); font-weight: 500; font-size: 1.2rem; margin: 0 0 .2rem; letter-spacing: -.01em; }
+  .card .cap { font-size: .78rem; color: var(--muted); margin: 0 0 1rem; }
+
+  svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .grid-line { stroke: var(--line); stroke-width: 1; }
+  .axis-text { fill: var(--muted); font-family: var(--mono); font-size: 10px; }
+  .bar { fill: var(--data); }
+  .bar:hover { fill: color-mix(in srgb, var(--data) 80%, var(--fg)); }
+
+  .vendors { display: flex; flex-direction: column; gap: .5rem; }
+  .vrow { display: grid; grid-template-columns: 7.5rem 1fr auto; align-items: center; gap: .6rem; font-size: .84rem; }
+  .vrow .vname { color: var(--fg); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .vrow .vbar { height: 12px; background: var(--data); border-radius: 3px; min-width: 2px; }
+  .vrow .vcount { font-family: var(--mono); font-size: .8rem; color: var(--muted); }
+
+  .table-card { margin-top: 1.1rem; }
+  .table-scroll { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; font-size: .85rem; min-width: 560px; }
+  th, td { text-align: left; padding: .5rem .6rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-family: var(--mono); font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+  td.cve { font-family: var(--mono); white-space: nowrap; }
+  td.cve a { color: var(--accent); text-decoration: none; }
+  td.cve a:hover { text-decoration: underline; }
+  td.date { font-family: var(--mono); color: var(--muted); white-space: nowrap; }
+  .badge { font-family: var(--mono); font-size: .68rem; padding: .1rem .45rem; border-radius: 5px; border: 1px solid var(--line); color: var(--muted); }
+  .badge.ransom { color: var(--critical); border-color: color-mix(in srgb, var(--critical) 55%, var(--line)); }
+
+  .state { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 2rem 1.2rem; text-align: center; color: var(--muted); }
+
+  footer { margin-top: 2.4rem; border-top: 1px solid var(--line); padding-top: 1rem; color: var(--muted); font-size: .8rem; }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+  footer p { margin: .3rem 0; max-width: 72ch; }
+
+  .tooltip { position: fixed; pointer-events: none; background: var(--fg); color: var(--bg); font-family: var(--mono); font-size: .72rem; padding: .3rem .5rem; border-radius: 6px; opacity: 0; transition: opacity .1s; z-index: 20; white-space: nowrap; }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Red Team, Visualized &middot; 02</p>
+    <h1>Known Exploited Vulnerabilities</h1>
+    <p class="dek">The CISA KEV catalog is the list of vulnerabilities that are being exploited in the wild right now &mdash; not theoretical, not scored, observed. This dashboard tracks what is being added and who keeps showing up. It refreshes itself: a GitHub Action pulls the public feed daily.</p>
+    <p class="asof" id="asof">Loading&hellip;</p>
+    <p class="note">Public data only, straight from the CISA KEV feed. No target or engagement data. A vulnerability here is being exploited &mdash; if it affects something you run, its due date already passed for federal agencies.</p>
+  </header>
+
+  <div id="content" hidden>
+    <div class="tiles" id="tiles"></div>
+
+    <div class="charts">
+      <section class="card">
+        <h2>Added per month</h2>
+        <p class="cap">New KEV entries, last 18 months</p>
+        <div id="monthsChart"></div>
+      </section>
+      <section class="card">
+        <h2>Top vendors</h2>
+        <p class="cap">Share of the full catalog</p>
+        <div class="vendors" id="vendors"></div>
+      </section>
+    </div>
+
+    <section class="card table-card">
+      <h2>Recent additions</h2>
+      <p class="cap">Newest entries in the catalog</p>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr><th>CVE</th><th>Vendor / Product</th><th>Added</th><th>Due</th><th>Ransomware</th></tr>
+          </thead>
+          <tbody id="recentBody"></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <div id="loading" class="state">Loading the KEV catalog&hellip;</div>
+  <div id="error" class="state" hidden>Could not load <code>data.json</code>. If you opened this file directly, serve the folder over HTTP so the fetch can resolve.</div>
+
+  <footer>
+    <p>Source: <a href="https://www.cisa.gov/known-exploited-vulnerabilities-catalog" target="_blank" rel="noopener">CISA Known Exploited Vulnerabilities Catalog</a> (public feed). Updated daily by a GitHub Action.</p>
+    <p>Part of the <em>Red Team, Visualized</em> series &middot; <a href="https://github.com/xingelf/agentic-redteam" target="_blank" rel="noopener">github.com/xingelf/agentic-redteam</a></p>
+  </footer>
+</div>
+
+<div class="tooltip" id="tip"></div>
+
+<script>
+  var tip = document.getElementById("tip");
+  function showTip(e, text) {
+    tip.textContent = text;
+    tip.style.opacity = "1";
+    tip.style.left = Math.min(e.clientX + 12, window.innerWidth - tip.offsetWidth - 8) + "px";
+    tip.style.top = (e.clientY + 14) + "px";
+  }
+  function hideTip() { tip.style.opacity = "0"; }
+
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  function fmt(n) { return Number(n).toLocaleString("en-US"); }
+
+  function fmtReleased(iso) {
+    if (!iso) return "";
+    var d = new Date(iso);
+    if (isNaN(d)) return iso.slice(0, 10);
+    return d.toISOString().slice(0, 10);
+  }
+
+  function renderTiles(d) {
+    var s = d.stats;
+    var tiles = [
+      { k: "Total in catalog", v: fmt(s.total), sub: "" },
+      { k: "Added, last 30 days", v: fmt(s.addedLast30Days), sub: s.addedThisMonth + " this month" },
+      { k: "Ransomware-linked", v: fmt(s.ransomwareLinked), sub: "known campaign use", crit: true },
+      { k: "Flagged for triage", v: fmt(s.forensicTriageYes), sub: "forensic triage advised" }
+    ];
+    document.getElementById("tiles").innerHTML = tiles.map(function (t) {
+      return '<div class="tile' + (t.crit ? " crit" : "") + '"><div class="k">' + esc(t.k) + '</div>' +
+        '<div class="v">' + esc(t.v) + '</div>' + (t.sub ? '<div class="sub">' + esc(t.sub) + '</div>' : '') + '</div>';
+    }).join("");
+  }
+
+  function renderMonths(d) {
+    var data = d.addedByMonth;
+    var W = 560, H = 220, padL = 28, padR = 8, padT = 10, padB = 28;
+    var plotW = W - padL - padR, plotH = H - padT - padB;
+    var max = Math.max.apply(null, data.map(function (m) { return m.count; })) || 1;
+    var step = plotW / data.length;
+    var bw = Math.max(3, step - 4);
+
+    // y gridlines at 0, max/2, max (rounded)
+    var ticks = [0, Math.round(max / 2), max];
+    var grid = ticks.map(function (t) {
+      var y = padT + plotH - (t / max) * plotH;
+      return '<line class="grid-line" x1="' + padL + '" y1="' + y + '" x2="' + (W - padR) + '" y2="' + y + '"/>' +
+        '<text class="axis-text" x="' + (padL - 5) + '" y="' + (y + 3) + '" text-anchor="end">' + t + '</text>';
+    }).join("");
+
+    var bars = data.map(function (m, i) {
+      var h = (m.count / max) * plotH;
+      var x = padL + i * step + (step - bw) / 2;
+      var y = padT + plotH - h;
+      var label = m.month + ": " + m.count + " added";
+      return '<rect class="bar" x="' + x.toFixed(1) + '" y="' + y.toFixed(1) + '" width="' + bw.toFixed(1) +
+        '" height="' + Math.max(0, h).toFixed(1) + '" rx="3" tabindex="0" role="img" aria-label="' + esc(label) +
+        '" data-label="' + esc(label) + '"><title>' + esc(label) + '</title></rect>';
+    }).join("");
+
+    var xlabels = data.map(function (m, i) {
+      if (i % 3 !== 0 && i !== data.length - 1) return "";
+      var x = padL + i * step + step / 2;
+      return '<text class="axis-text" x="' + x.toFixed(1) + '" y="' + (H - 8) + '" text-anchor="middle">' + m.month.slice(2) + '</text>';
+    }).join("");
+
+    document.getElementById("monthsChart").innerHTML =
+      '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="New KEV entries per month for the last 18 months">' +
+      grid + bars + xlabels + '</svg>';
+
+    var svg = document.querySelector("#monthsChart svg");
+    svg.querySelectorAll(".bar").forEach(function (r) {
+      r.addEventListener("mousemove", function (e) { showTip(e, r.getAttribute("data-label")); });
+      r.addEventListener("mouseleave", hideTip);
+    });
+  }
+
+  function renderVendors(d) {
+    var data = d.topVendors;
+    var max = Math.max.apply(null, data.map(function (v) { return v.count; })) || 1;
+    document.getElementById("vendors").innerHTML = data.map(function (v) {
+      var pct = (v.count / max) * 100;
+      return '<div class="vrow"><span class="vname" title="' + esc(v.vendor) + '">' + esc(v.vendor) + '</span>' +
+        '<span class="vbar" style="width:' + pct.toFixed(1) + '%" title="' + esc(v.vendor + ": " + v.count) + '"></span>' +
+        '<span class="vcount">' + fmt(v.count) + '</span></div>';
+    }).join("");
+  }
+
+  function renderRecent(d) {
+    document.getElementById("recentBody").innerHTML = d.recent.map(function (r) {
+      var ransom = r.knownRansomwareCampaignUse === "Known";
+      var cveUrl = "https://nvd.nist.gov/vuln/detail/" + encodeURIComponent(r.cveID);
+      return '<tr>' +
+        '<td class="cve"><a href="' + cveUrl + '" target="_blank" rel="noopener">' + esc(r.cveID) + '</a></td>' +
+        '<td title="' + esc(r.vulnerabilityName + (r.shortDescription ? " — " + r.shortDescription : "")) + '">' +
+          '<strong>' + esc(r.vendorProject) + '</strong> &middot; ' + esc(r.product) + '</td>' +
+        '<td class="date">' + esc(r.dateAdded) + '</td>' +
+        '<td class="date">' + esc(r.dueDate) + '</td>' +
+        '<td>' + (ransom ? '<span class="badge ransom">Known</span>' : '<span class="badge">&mdash;</span>') + '</td>' +
+        '</tr>';
+    }).join("");
+  }
+
+  fetch("./data.json", { cache: "no-store" })
+    .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+    .then(function (d) {
+      document.getElementById("asof").innerHTML =
+        "Catalog <b>" + esc(d.meta.catalogVersion) + "</b> &middot; released " + esc(fmtReleased(d.meta.dateReleased)) +
+        " &middot; snapshot " + esc(fmtReleased(d.meta.generatedAt));
+      renderTiles(d); renderMonths(d); renderVendors(d); renderRecent(d);
+      document.getElementById("loading").hidden = true;
+      document.getElementById("content").hidden = false;
+    })
+    .catch(function () {
+      document.getElementById("loading").hidden = true;
+      document.getElementById("error").hidden = false;
+    });
+</script>

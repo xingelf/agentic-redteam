@@ -37,6 +37,7 @@ Interactive, self-contained visualizations built on public frameworks. Series: *
 | Title | What it shows | Source |
 |-------|---------------|--------|
 | [The Agentic Kill-Chain](https://claude.ai/artifact/2b9PoSo7akPqxFB4wcFvEr) | The autonomous offensive loop, stage by stage, with ATT&CK mappings, detection, and defenses | [viz/agentic-kill-chain](viz/agentic-kill-chain/) |
+| [Known Exploited Vulnerabilities](https://claude.ai/artifact/KoSp8ouaXBGwv4AucwCbYV) | Self-updating CISA KEV dashboard — totals, monthly additions, top vendors, newest entries (refreshed daily by GitHub Actions) | [viz/kev-dashboard](viz/kev-dashboard/) |
 
 ## Tools
 
