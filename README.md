@@ -8,6 +8,7 @@ Updated roughly once a week.
 
 | Date | Title | Topic |
 |------|-------|-------|
+| 2026-10-18 | [Red Team, Visualized: What a Breach Costs the Share Price](posts/2026-10-18_breach-stock-impact.md) | Security economics / event study |
 | 2026-10-18 | [Red Team, Visualized: The Agentic Kill-Chain](posts/2026-10-18_red-team-visualized-kill-chain.md) | Visualization / ATT&CK |
 | 2026-10-10 | [ARTEX and the Dual-Use Problem We Knew Was Coming](posts/2026-10-10_artex-dual-use.md) | Dual-use / threat intel |
 | 2026-10-08 | [GLM-5.3 Leads One Cyber Benchmark and Trails Two. Read the Fine Print.](posts/2026-10-08_glm-5-3-cyber-benchmarks.md) | LLM cyber benchmarks |
@@ -38,6 +39,7 @@ Interactive, self-contained visualizations built on public frameworks and public
 |-------|---------------|------|--------|
 | The Agentic Kill-Chain | The autonomous offensive loop, stage by stage, with ATT&CK mappings, detection, and defenses | [Pages](https://xingelf.github.io/agentic-redteam/viz/agentic-kill-chain/) | [viz/agentic-kill-chain](viz/agentic-kill-chain/) |
 | Known Exploited Vulnerabilities | Self-updating CISA KEV dashboard — totals, monthly additions, top vendors, newest entries (refreshed daily by GitHub Actions) | [Pages](https://xingelf.github.io/agentic-redteam/viz/kev-dashboard/) | [viz/kev-dashboard](viz/kev-dashboard/) |
+| What a Breach Costs the Share Price | Event study of nine public-company incidents — abnormal returns and CAR around disclosure, stripped of market moves | [Pages](https://xingelf.github.io/agentic-redteam/viz/breach-stock-impact/) | [viz/breach-stock-impact](viz/breach-stock-impact/) |
 
 ## Tools
 
