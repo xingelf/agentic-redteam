@@ -8,8 +8,7 @@ Second piece in the **Red Team, Visualized** series.
 
 ## Live
 
-- GitHub Pages: https://xingelf.github.io/agentic-redteam/viz/kev-dashboard/ (enable Pages for the repo)
-- Claude Artifact (snapshot): https://claude.ai/artifact/KoSp8ouaXBGwv4AucwCbYV
+- GitHub Pages: https://xingelf.github.io/agentic-redteam/viz/kev-dashboard/
 - Companion post: [../../posts/2026-10-18_red-team-visualized-kill-chain.md](../../posts/2026-10-18_red-team-visualized-kill-chain.md)
 
 ## How it updates
@@ -21,9 +20,6 @@ Second piece in the **Red Team, Visualized** series.
 - On GitHub Pages the page fetches `./data.json` at load, so every visit shows the
   latest committed snapshot. The committed `data.json` also keeps the repo
   self-contained.
-
-The Claude Artifact snapshot is published with `index.html` and `data.json`
-together; re-publish to refresh it.
 
 ## Files
 

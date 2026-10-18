@@ -9,15 +9,15 @@ First piece in the **Red Team, Visualized** series.
 
 ## Live
 
-- Interactive: https://claude.ai/artifact/2b9PoSo7akPqxFB4wcFvEr
+- GitHub Pages: https://xingelf.github.io/agentic-redteam/viz/agentic-kill-chain/
 - Companion post: [../../posts/2026-10-18_red-team-visualized-kill-chain.md](../../posts/2026-10-18_red-team-visualized-kill-chain.md)
 
 ## How it's built
 
 - `index.html` is self-contained: no build step, no dependencies, no network calls.
   Fonts load from Google Fonts; everything else is inline.
-- It is the source of the published Claude Artifact above. Opening the file
-  directly in a browser works too.
+- It is served live on GitHub Pages. Opening the file directly in a browser works
+  too.
 
 ## Data
 

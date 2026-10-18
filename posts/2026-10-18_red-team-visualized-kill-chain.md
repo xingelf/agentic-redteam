@@ -22,7 +22,7 @@ no engagement data.
 
 ## The first one
 
-[The Agentic Kill-Chain](https://claude.ai/artifact/2b9PoSo7akPqxFB4wcFvEr) is an
+[The Agentic Kill-Chain](https://xingelf.github.io/agentic-redteam/viz/agentic-kill-chain/) is an
 interactive map of the loop an autonomous offensive agent runs: gather, find,
 plan, exploit, hold, take — then repeat with what it learned.
 
