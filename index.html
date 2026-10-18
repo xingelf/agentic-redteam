@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Red Team, Visualized</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --bg: #e7e6e2; --surface: #f2f1ed; --fg: #222528; --muted: #6a6d72; --line: #c9c7c0; --accent: #45586b;
+    --display: "Fraunces", Georgia, serif;
+    --body: "IBM Plex Sans", system-ui, -apple-system, Segoe UI, sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #15171a; --surface: #1c1f23; --fg: #e6e5e1; --muted: #9aa0a6; --line: #313640; --accent: #8aa0b5;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #15171a; --surface: #1c1f23; --fg: #e6e5e1; --muted: #9aa0a6; --line: #313640; --accent: #8aa0b5;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: var(--bg); color: var(--fg); font-family: var(--body); line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 780px; margin: 0 auto;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: clamp(2rem, 6vw, 4.5rem);
+  }
+  .eyebrow { font-family: var(--mono); font-size: .74rem; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); margin: 0 0 .6rem; }
+  h1 { font-family: var(--display); font-weight: 500; font-size: clamp(2.2rem, 7vw, 3.4rem); line-height: 1.04; letter-spacing: -.01em; margin: 0 0 .8rem; text-wrap: balance; }
+  .dek { color: var(--muted); font-size: 1.05rem; max-width: 60ch; margin: 0 0 2.2rem; }
+  .list { display: flex; flex-direction: column; gap: 1rem; margin: 0; padding: 0; list-style: none; }
+  .item {
+    display: block; text-decoration: none; color: inherit;
+    background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
+    padding: 1.2rem 1.3rem;
+    transition: border-color .15s ease, transform .15s ease;
+  }
+  .item:hover { border-color: var(--fg); transform: translateY(-1px); }
+  .item .n { font-family: var(--mono); font-size: .72rem; color: var(--muted); letter-spacing: .1em; }
+  .item h2 { font-family: var(--display); font-weight: 500; font-size: 1.4rem; margin: .25rem 0 .35rem; letter-spacing: -.01em; }
+  .item p { margin: 0; color: var(--muted); font-size: .95rem; }
+  .item .go { color: var(--accent); font-size: .85rem; font-family: var(--mono); margin-top: .6rem; display: inline-block; }
+  footer { margin-top: 2.6rem; border-top: 1px solid var(--line); padding-top: 1rem; color: var(--muted); font-size: .82rem; }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+  <main class="wrap">
+    <p class="eyebrow">Red Team, Visualized</p>
+    <h1>Seeing the threat, one mechanism at a time.</h1>
+    <p class="dek">Small, self-contained visualizations on agentic AI and red teaming. Built on public frameworks and public data &mdash; no target or engagement data. Part of <a href="https://github.com/xingelf/agentic-redteam" style="color:var(--accent)">agentic-redteam</a>.</p>
+
+    <ul class="list">
+      <li>
+        <a class="item" href="viz/kev-dashboard/">
+          <span class="n">02 &middot; live, updated daily</span>
+          <h2>Known Exploited Vulnerabilities</h2>
+          <p>A self-updating dashboard of the CISA KEV catalog: totals, additions per month, top vendors, and the newest entries.</p>
+          <span class="go">Open &rarr;</span>
+        </a>
+      </li>
+      <li>
+        <a class="item" href="viz/agentic-kill-chain/">
+          <span class="n">01</span>
+          <h2>The Agentic Kill-Chain</h2>
+          <p>The autonomous offensive loop, stage by stage, with ATT&amp;CK mappings, detection opportunities, and defenses.</p>
+          <span class="go">Open &rarr;</span>
+        </a>
+      </li>
+    </ul>
+
+    <footer>
+      <p>Source: <a href="https://github.com/xingelf/agentic-redteam">github.com/xingelf/agentic-redteam</a> &middot; deployed from GitHub Actions.</p>
+    </footer>
+  </main>
+</body>
+</html>

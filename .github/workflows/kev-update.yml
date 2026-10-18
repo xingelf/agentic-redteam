@@ -31,8 +31,9 @@ jobs:
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add viz/kev-dashboard/data.json
-            git commit -m "data: refresh KEV dashboard [skip ci]"
+            git commit -m "data: refresh KEV dashboard"
             git push
+            # No [skip ci]: this push triggers the Pages deploy so the live site refreshes.
           else
             echo "No change in KEV data."
           fi
