@@ -26,31 +26,46 @@ import urllib.parse
 import urllib.request
 
 # --- incidents -------------------------------------------------------------
-# name, ticker, sector, public disclosure date, region. All dates are public
-# (filings and reporting); day0 is the first trading day >= disclosure. Each
-# incident is measured against its home-market benchmark (see BENCHMARKS).
+# name, ticker, sector, public disclosure date, region, home-market benchmark.
+# All dates are public (filings and reporting); day0 is the first trading day
+# >= disclosure. Each incident is measured against its own home-country index,
+# in the same currency, so a broad market move is stripped out cleanly.
 INCIDENTS = [
     # United States (vs S&P 500)
-    ("Equifax",            "EFX",   "Financial data", "2017-09-07", "US"),
-    ("Target",             "TGT",   "Retail",         "2013-12-19", "US"),
-    ("Marriott",           "MAR",   "Hospitality",    "2018-11-30", "US"),
-    ("Capital One",        "COF",   "Banking",        "2019-07-29", "US"),
-    ("Progress (MOVEit)",  "PRGS",  "Software",       "2023-05-31", "US"),
-    ("Okta",               "OKTA",  "Identity",       "2022-03-22", "US"),
-    ("MGM Resorts",        "MGM",   "Hospitality",    "2023-09-11", "US"),
-    ("Clorox",             "CLX",   "Consumer goods", "2023-08-14", "US"),
-    ("UnitedHealth/Change","UNH",   "Healthcare",     "2024-02-22", "US"),
+    ("Equifax",            "EFX",        "Financial data", "2017-09-07", "US", "^GSPC"),
+    ("Target",             "TGT",        "Retail",         "2013-12-19", "US", "^GSPC"),
+    ("Marriott",           "MAR",        "Hospitality",    "2018-11-30", "US", "^GSPC"),
+    ("Capital One",        "COF",        "Banking",        "2019-07-29", "US", "^GSPC"),
+    ("Progress (MOVEit)",  "PRGS",       "Software",       "2023-05-31", "US", "^GSPC"),
+    ("Okta",               "OKTA",       "Identity",       "2022-03-22", "US", "^GSPC"),
+    ("MGM Resorts",        "MGM",        "Hospitality",    "2023-09-11", "US", "^GSPC"),
+    ("Clorox",             "CLX",        "Consumer goods", "2023-08-14", "US", "^GSPC"),
+    ("UnitedHealth/Change","UNH",        "Healthcare",     "2024-02-22", "US", "^GSPC"),
     # Japan (vs Nikkei 225)
-    ("Capcom",             "9697.T","Games",          "2020-11-02", "JP"),
-    ("KADOKAWA",           "9468.T","Media",          "2024-06-08", "JP"),
-    ("Toyota",             "7203.T","Automotive",     "2022-02-28", "JP"),
-    ("Honda",              "7267.T","Automotive",     "2020-06-08", "JP"),
-    ("Mitsubishi Electric","6503.T","Electronics",    "2020-01-20", "JP"),
-    ("Fujitsu",            "6702.T","IT services",    "2021-05-26", "JP"),
-    ("Casio",              "6952.T","Electronics",    "2024-10-07", "JP"),
+    ("Capcom",             "9697.T",     "Games",          "2020-11-02", "JP", "^N225"),
+    ("KADOKAWA",           "9468.T",     "Media",          "2024-06-08", "JP", "^N225"),
+    ("Toyota",             "7203.T",     "Automotive",     "2022-02-28", "JP", "^N225"),
+    ("Honda",              "7267.T",     "Automotive",     "2020-06-08", "JP", "^N225"),
+    ("Mitsubishi Electric","6503.T",     "Electronics",    "2020-01-20", "JP", "^N225"),
+    ("Fujitsu",            "6702.T",     "IT services",    "2021-05-26", "JP", "^N225"),
+    ("Casio",              "6952.T",     "Electronics",    "2024-10-07", "JP", "^N225"),
+    # Europe (each vs its home-country index)
+    ("Maersk",             "MAERSK-B.CO","Shipping",       "2017-06-27", "EU", "^OMXC25"),
+    ("Norsk Hydro",        "NHY.OL",     "Metals",         "2019-03-19", "EU", "OSEBX.OL"),
+    ("Marks & Spencer",    "MKS.L",      "Retail",         "2025-04-22", "EU", "^FTSE"),
+    ("EasyJet",            "EZJ.L",      "Airline",        "2020-05-19", "EU", "^FTSE"),
+    ("Thyssenkrupp",       "TKA.DE",     "Industrials",    "2016-12-08", "EU", "^GDAXI"),
+    ("Bayer",              "BAYN.DE",    "Pharma",         "2019-04-04", "EU", "^GDAXI"),
+    ("Sopra Steria",       "SOP.PA",     "IT services",    "2020-10-21", "EU", "^FCHI"),
+    ("Capita",             "CPI.L",      "Outsourcing",    "2023-03-31", "EU", "^FTSE"),
 ]
 
-BENCHMARKS = {"US": "^GSPC", "JP": "^N225"}  # home-market proxy per region
+REGIONS = ["US", "JP", "EU"]
+BENCHMARK_LABELS = {
+    "US": "S&P 500",
+    "JP": "Nikkei 225",
+    "EU": "home-country indices (FTSE 100, DAX, CAC 40, OMXC25, OSEBX)",
+}
 EST_START, EST_END = -250, -11   # estimation window (trading days rel. to day0)
 PRE, POST = -10, 30              # event window (trading days rel. to day0)
 
@@ -103,9 +118,8 @@ def ols(xs, ys):
     return alpha, beta
 
 
-def study_one(name, ticker, sector, disclosure, region):
+def study_one(name, ticker, sector, disclosure, region, benchmark):
     d = dt.date.fromisoformat(disclosure)
-    benchmark = BENCHMARKS[region]
     # Wide fetch window: ~430 calendar days before, ~60 after.
     stock = fetch_prices(ticker, d - dt.timedelta(days=430),
                          d + dt.timedelta(days=60))
@@ -183,12 +197,12 @@ def average(group):
 
 def main():
     incidents = []
-    for name, ticker, sector, disclosure, region in INCIDENTS:
+    for row in INCIDENTS:
+        name, ticker, sector, disclosure, region, benchmark = row
         print(f"... {ticker} ({region}, {disclosure})", flush=True)
         for attempt in range(3):
             try:
-                incidents.append(
-                    study_one(name, ticker, sector, disclosure, region))
+                incidents.append(study_one(*row))
                 break
             except Exception as e:  # noqa: BLE001 - keep building the rest
                 print(f"    retry {attempt+1}: {type(e).__name__}: {e}")
@@ -196,20 +210,21 @@ def main():
         else:
             print(f"    SKIP {ticker}: failed after retries")
 
-    us = [i for i in incidents if i["region"] == "US"]
-    jp = [i for i in incidents if i["region"] == "JP"]
     averages = {"ALL": average(incidents)}
-    if us:
-        averages["US"] = average(us)
-    if jp:
-        averages["JP"] = average(jp)
+    counts = {}
+    for region in REGIONS:
+        group = [i for i in incidents if i["region"] == region]
+        counts[region] = len(group)
+        if group:
+            averages[region] = average(group)
 
     data = {
         "generatedAt": dt.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
-        "benchmarks": BENCHMARKS,
+        "regions": REGIONS,
+        "benchmarkLabels": BENCHMARK_LABELS,
         "model": ("market model: AR = R_stock - (alpha + beta * R_market), "
                   f"estimation window [{EST_START},{EST_END}] trading days, "
-                  "each incident vs its home-market benchmark"),
+                  "each incident vs its home-country index"),
         "eventWindow": {"pre": PRE, "post": POST},
         "note": ("Public data only. Education / analysis, not investment advice. "
                  "Correlation is not causation."),
@@ -222,8 +237,9 @@ def main():
         json.dump(data, f, indent=2)
         f.write("\n")
     print(f"\nwrote {OUT}")
-    print(f"incidents={len(incidents)} (US={len(us)}, JP={len(jp)})")
-    for key in ("ALL", "US", "JP"):
+    print(f"incidents={len(incidents)} "
+          + ", ".join(f"{r}={counts[r]}" for r in REGIONS))
+    for key in ["ALL"] + REGIONS:
         if key in averages:
             print(f"  {key}: CAR[0,+30]={averages[key]['car'].get('d30')}%")
 

@@ -63,6 +63,8 @@
   .tile.us .v { color: var(--accent); }
   .tile.jp { border-color: color-mix(in srgb, var(--data) 55%, var(--line)); }
   .tile.jp .v { color: var(--data); }
+  .tile.eu { border-color: color-mix(in srgb, var(--critical) 55%, var(--line)); }
+  .tile.eu .v { color: var(--critical); }
   .tile .sub { font-size: .76rem; color: var(--muted); margin-top: .15rem; }
 
   .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.1rem 1.2rem; min-width: 0; margin-bottom: 1.1rem; }
@@ -135,7 +137,7 @@
   <header>
     <p class="eyebrow">Red Team, Visualized &middot; 03</p>
     <h1>What a Breach Costs the Share Price</h1>
-    <p class="dek">When a public company discloses a major cyber incident, does the market punish it &mdash; and does it matter which market? This is an event study of sixteen incidents, nine in the US and seven in Japan. For each one we model the stock's normal relationship to its home index, then measure the <em>abnormal</em> return around the disclosure date, so a general market move is stripped out. The headline is the cumulative abnormal return (CAR).</p>
+    <p class="dek">When a public company discloses a major cyber incident, does the market punish it &mdash; and does it matter which market? This is an event study of twenty-four incidents across the US, Japan, and Europe. For each one we model the stock's normal relationship to its home index, then measure the <em>abnormal</em> return around the disclosure date, so a general market move is stripped out. The headline is the cumulative abnormal return (CAR).</p>
     <p class="asof" id="asof">Loading&hellip;</p>
     <p class="note">Public data only &mdash; prices from a public market data API, disclosure dates from filings and reporting. Education and analysis, not investment advice. These are well-known, severe incidents chosen on purpose, so they are not a random sample; correlation is not causation, and a single incident's window can be swamped by unrelated news.</p>
   </header>
@@ -152,13 +154,13 @@
 
     <section class="card">
       <h2>Abnormal return by day +30</h2>
-      <p class="cap">Each incident's cumulative abnormal return over the 30 trading days after disclosure. Bars left of the line are losses; a few land right of it &mdash; the market shrugged, or other news dominated the window.</p>
+      <p class="cap">Each incident's cumulative abnormal return over the 30 trading days after disclosure, colored by market. Bars left of the line are losses; a few land right of it &mdash; the market shrugged, or other news dominated the window.</p>
       <div class="bars" id="bars"></div>
     </section>
 
     <section class="card">
       <h2>Each incident, indexed to the disclosure</h2>
-      <p class="cap">Cumulative abnormal return from day &minus;10 to +30 trading days, set to zero the day before disclosure. The vertical line is day&nbsp;0. US lines in blue, Japan in green.</p>
+      <p class="cap">Cumulative abnormal return from day &minus;10 to +30 trading days, set to zero the day before disclosure. The vertical line is day&nbsp;0. Colored by market: US blue, Japan green, Europe red. Shared vertical scale.</p>
       <div class="sparks" id="sparks"></div>
     </section>
 
@@ -183,7 +185,7 @@
   <div id="error" class="state" hidden>Could not load <code>data.json</code>. If you opened this file directly, serve the folder over HTTP so the fetch can resolve.</div>
 
   <footer>
-    <p>Method: market-model event study. For each incident, AR = R<sub>stock</sub> &minus; (&alpha; + &beta;&middot;R<sub>market</sub>), with &alpha; and &beta; estimated over a pre-event window; CAR is the running sum. The average line is the cumulative average abnormal return (CAAR). Benchmarks: S&amp;P 500 (US), Nikkei 225 (Japan) &mdash; each incident against its home index.</p>
+    <p>Method: market-model event study. For each incident, AR = R<sub>stock</sub> &minus; (&alpha; + &beta;&middot;R<sub>market</sub>), with &alpha; and &beta; estimated over a pre-event window; CAR is the running sum. The average line is the cumulative average abnormal return (CAAR). Each incident is measured against its home-country index in the same currency: S&amp;P 500 (US), Nikkei 225 (Japan), and FTSE 100 / DAX / CAC 40 / OMXC25 / OSEBX (Europe).</p>
     <p>Prices: public market data API (adjusted close). Disclosure dates: public filings and reporting. No client, target, or engagement data. Not investment advice.</p>
     <p>Part of the <em>Red Team, Visualized</em> series &middot; <a href="https://github.com/xingelf/agentic-redteam" target="_blank" rel="noopener">github.com/xingelf/agentic-redteam</a></p>
   </footer>
@@ -192,8 +194,8 @@
 <div class="tooltip" id="tip"></div>
 
 <script>
-  var COLORS = { US: "var(--accent)", JP: "var(--data)" };
-  var REGION = { US: "United States", JP: "Japan" };
+  var COLORS = { US: "var(--accent)", JP: "var(--data)", EU: "var(--critical)" };
+  var REGION = { US: "United States", JP: "Japan", EU: "Europe" };
 
   var tip = document.getElementById("tip");
   function showTip(e, text) {
@@ -224,14 +226,12 @@
   }
 
   function renderTiles(d) {
-    var us = d.averages.US, jp = d.averages.JP;
-    var gap = (us.car.d30 - jp.car.d30);
-    var tiles = [
-      { k: "Incidents studied", v: String(d.incidents.length), sub: us.count + " US · " + jp.count + " Japan" },
-      { k: "US avg, +30 days", v: sgn(us.car.d30), sub: "vs S&P 500", cl: "us" },
-      { k: "Japan avg, +30 days", v: sgn(jp.car.d30), sub: "vs Nikkei 225", cl: "jp" },
-      { k: "US − Japan gap", v: Math.abs(gap).toFixed(1) + " pts", sub: "US markets reprice harder" }
-    ];
+    var counts = d.regions.map(function (r) { return d.averages[r].count + " " + r; }).join(" · ");
+    var subs = { US: "vs S&P 500", JP: "vs Nikkei 225", EU: "vs home indices" };
+    var tiles = [{ k: "Incidents studied", v: String(d.incidents.length), sub: counts }];
+    d.regions.forEach(function (r) {
+      tiles.push({ k: REGION[r] + " avg, +30 days", v: sgn(d.averages[r].car.d30), sub: subs[r], cl: r.toLowerCase() });
+    });
     document.getElementById("tiles").innerHTML = tiles.map(function (t) {
       return '<div class="tile ' + (t.cl || "") + '"><div class="k">' + esc(t.k) + '</div>' +
         '<div class="v">' + esc(t.v) + '</div>' + (t.sub ? '<div class="sub">' + esc(t.sub) + '</div>' : '') + '</div>';
@@ -239,7 +239,7 @@
   }
 
   function renderCaar(d) {
-    var series = ["US", "JP"].filter(function (k) { return d.averages[k]; }).map(function (k) {
+    var series = d.regions.filter(function (k) { return d.averages[k]; }).map(function (k) {
       return { key: k, label: REGION[k], color: COLORS[k], pts: rebased(d.averages[k].path, "caar") };
     });
     document.getElementById("caarLegend").innerHTML = series.map(function (s) {
@@ -306,9 +306,8 @@
     cap.addEventListener("mouseleave", function () { hover.innerHTML = ""; hideTip(); });
 
     document.getElementById("caarCap").textContent =
-      "Average across each market's incidents, day −10 to +30 trading days. By +30 the average US stock sits " +
-      sgn(d.averages.US.car.d30) + " below its predicted value; the average Japanese stock, " +
-      sgn(d.averages.JP.car.d30) + ".";
+      "Average across each market's incidents, day −10 to +30 trading days. By +30: " +
+      series.map(function (s) { return REGION[s.key] + " " + sgn(d.averages[s.key].car.d30); }).join(", ") + ".";
   }
 
   function renderBars(d) {
@@ -316,9 +315,10 @@
     var maxAbs = Math.max.apply(null, rows.map(function (r) { return Math.abs(r.car.d30); })) || 1;
     document.getElementById("bars").innerHTML = rows.map(function (r) {
       var v = r.car.d30, w = Math.abs(v) / maxAbs * 50, neg = v < 0;
+      var color = COLORS[r.region];
       var style = neg
-        ? "right:50%;width:" + w.toFixed(1) + "%;background:var(--critical);border-radius:3px 0 0 3px;"
-        : "left:50%;width:" + w.toFixed(1) + "%;background:var(--data);border-radius:0 3px 3px 0;";
+        ? "right:50%;width:" + w.toFixed(1) + "%;background:" + color + ";border-radius:3px 0 0 3px;"
+        : "left:50%;width:" + w.toFixed(1) + "%;background:" + color + ";border-radius:0 3px 3px 0;";
       return '<div class="brow">' +
         '<span class="bname">' + esc(r.name) + ' <small>' + esc(r.region) + '</small></span>' +
         '<span class="btrack"><span class="bzero"></span>' +
@@ -373,8 +373,9 @@
     .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
     .then(function (d) {
       document.getElementById("asof").innerHTML =
-        "<b>" + d.incidents.length + "</b> incidents &middot; " + d.averages.US.count + " US / " + d.averages.JP.count + " Japan" +
-        " &middot; S&P 500 + Nikkei 225 &middot; snapshot " + esc((d.generatedAt || "").slice(0, 10));
+        "<b>" + d.incidents.length + "</b> incidents &middot; " +
+        d.regions.map(function (r) { return d.averages[r].count + " " + r; }).join(" / ") +
+        " &middot; snapshot " + esc((d.generatedAt || "").slice(0, 10));
       renderTiles(d); renderCaar(d); renderBars(d); renderSparks(d); renderTable(d);
       document.getElementById("loading").hidden = true;
       document.getElementById("content").hidden = false;

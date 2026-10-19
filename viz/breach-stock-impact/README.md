@@ -1,13 +1,15 @@
 # Breach Stock Impact
 
 An event study of what a public company's share price does after it discloses a
-major cyber incident, comparing the US and Japan. For each incident we fit a market
-model (alpha + beta against its home index) over a pre-event window, then measure the
-**abnormal return** around the disclosure date, so broad market moves are stripped
-out. The headline line is the cumulative abnormal return (CAR), and the average across
-each market's incidents is the cumulative average abnormal return (CAAR). Across the
-sample, US disclosures reprice harder (about −13% by day +30) than Japanese ones
-(about −3%).
+major cyber incident, across the US, Japan, and Europe. For each incident we fit a
+market model (alpha + beta against its home-country index) over a pre-event window,
+then measure the **abnormal return** around the disclosure date, so broad market moves
+are stripped out. The headline line is the cumulative abnormal return (CAR), and the
+average across each market's incidents is the cumulative average abnormal return
+(CAAR). Across the sample, US disclosures reprice hardest (about −13% by day +30),
+Europe in the middle (about −6%), Japan the mildest (about −3%) — but the real story
+is the spread: in every market, the incidents that hit the trust the business sells
+fall furthest.
 
 Third piece in the **Red Team, Visualized** series.
 
@@ -24,8 +26,10 @@ Third piece in the **Red Team, Visualized** series.
   to zero the day before disclosure so the end value is the post-event CAR.
 - **CAAR**: the average AR per relative day across all incidents, cumulated.
 - **day 0**: the first trading day on or after the public disclosure date.
-- **Benchmarks**: each incident against its home index — S&P 500 (`^GSPC`) for US
-  names, Nikkei 225 (`^N225`) for Japanese names (`NNNN.T` tickers).
+- **Benchmarks**: each incident against its home-country index in the same currency —
+  S&P 500 (`^GSPC`) for US names, Nikkei 225 (`^N225`) for Japan (`NNNN.T`), and for
+  Europe the FTSE 100 (`^FTSE`), DAX (`^GDAXI`), CAC 40 (`^FCHI`), OMXC25 (`^OMXC25`),
+  or OSEBX (`OSEBX.OL`) as fits the listing.
 
 ## How it's built
 

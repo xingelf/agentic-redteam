@@ -7,12 +7,13 @@ tags: ["security-economics", "red-team", "visualization", "event-study"]
 # Red Team, Visualized: What a Breach Costs the Share Price
 
 **TL;DR** — People ask whether a breach "really" hurts a public company, or whether
-the stock just dips and recovers. I ran an event study on sixteen well-known
-incidents, nine in the US and seven in Japan: strip out the market, measure the
+the stock just dips and recovers. I ran an event study on twenty-four well-known
+incidents across the US, Japan, and Europe: strip out the market, measure the
 abnormal return around the disclosure date, and watch the line. The US average sat
-about 13% below its expected value thirty trading days after disclosure. The Japanese
-average was about 3%. Same kind of incident, very different market reaction. [See it
-in the visualization](https://xingelf.github.io/agentic-redteam/viz/breach-stock-impact/).
+about 13% below its expected value thirty trading days after disclosure, Europe about
+6%, and Japan about 3%. Same kind of incident, three different market reactions — and
+one pattern that holds in all three. [See it in the
+visualization](https://xingelf.github.io/agentic-redteam/viz/breach-stock-impact/).
 
 ## The question, and the trap
 
@@ -28,76 +29,79 @@ to the index (beta) — estimated over a long window *before* the incident. Then
 the disclosure, you measure the **abnormal return**: how far the stock moved beyond
 what that relationship predicts. Sum it over time and you get the cumulative abnormal
 return (CAR). That is the part you can plausibly attribute to the event, with the
-market's noise removed. I measured each company against its home index — US names
-against the S&P 500, Japanese names against the Nikkei 225 — so "the market" means the
-right market in each case.
+market's noise removed. I measured each company against its own home-country index, in
+the same currency — US names against the S&P 500, Japanese names against the Nikkei
+225, European names against the FTSE 100, DAX, CAC 40, OMXC25, or OSEBX as fit — so
+"the market" means the right market in each case.
 
-## What the sixteen show
+## What the twenty-four show
 
 I picked companies with major, well-documented incidents and clear public disclosure
 dates. US: Equifax, Target, Marriott, Capital One, Progress (MOVEit), Okta, MGM
-Resorts, Clorox, and UnitedHealth's Change Healthcare. Japan: Capcom, KADOKAWA,
-Toyota, Honda, Mitsubishi Electric, Fujitsu, and Casio. The window runs from ten
+Resorts, Clorox, UnitedHealth's Change Healthcare. Japan: Capcom, KADOKAWA, Toyota,
+Honda, Mitsubishi Electric, Fujitsu, Casio. Europe: Maersk, Norsk Hydro, Marks &
+Spencer, EasyJet, Thyssenkrupp, Bayer, Sopra Steria, Capita. The window runs from ten
 trading days before disclosure to thirty after.
 
-The headline is the split between the two markets:
+The averages differ by market:
 
-- **US average: about −13% cumulative abnormal return by day +30**, and every one of
-  the nine was negative.
-- **Japan average: about −3% by day +30**, and two of the seven were actually
-  *positive* over the window.
+- **US: about −13% cumulative abnormal return by day +30**, and every one of the nine
+  was negative.
+- **Europe: about −6%**, with a huge spread — two IT/outsourcing names down more than
+  20%, two others actually up.
+- **Japan: about −3%**, the mildest, with two of seven positive over the window.
 
-That is a real gap, and it is the most interesting thing in the data. The same class
-of event — a disclosed, serious breach at a large listed company — gets repriced hard
-in the US and shrugged off, on average, in Japan.
+The US reacts hardest. Part of that is disclosure culture: US issuers face SEC
+pressure to disclose material incidents quickly and specifically, so the market gets a
+sharp, dated signal. Several European and Japanese disclosures were vaguer or surfaced
+first through press reporting, which smears the reaction across days. But the averages
+are the least interesting part. The pattern in the *spread* is the point.
 
-## Why the US reacts harder
+## The one pattern that holds everywhere
 
-I would not over-read a seven-name Japanese sample, and the caveats below matter. But
-the pattern is consistent with a few things:
+Sort every incident by its 30-day move and the worst cases, in all three markets, have
+one thing in common: **the breach hit the thing the business sells.**
 
-- **Disclosure timing and culture differ.** US issuers face SEC pressure to disclose
-  material incidents quickly and specifically; the market gets a sharp, dated signal.
-  Several of the Japanese disclosures were vaguer, slower, or surfaced first through
-  press reporting, which smears the reaction across days instead of concentrating it.
-- **What got hit differs.** The worst US cases attacked the thing the business sells.
-  Equifax is a credit-data company and lost trust in its data handling; it slid to
-  roughly −25%. Okta sells identity security, and a security vendor getting breached is
-  an argument against its own product; it ended near −21%. Change Healthcare was an
-  operational chokepoint for US medical claims.
-- **The Japanese incidents skewed operational.** Toyota and Honda were production
-  stoppages — bad, but a one-off cost at a company whose customers do not leave over
-  it. Both ended only a few percent down. The exception proves the rule: **KADOKAWA**,
-  whose platforms and publishing operations were down for weeks, fell about −16% —
-  because for KADOKAWA the outage *was* the business.
+- **US**: Equifax, a credit-data company that lost trust in its data handling, slid to
+  about −25%. Okta, which sells identity security, ended near −21% — a security vendor
+  getting breached is an argument against its own product.
+- **Europe**: Capita, a UK outsourcer that runs other companies' operations and data,
+  fell about −29%. Sopra Steria, a French IT-services giant, about −22%. Same logic as
+  Okta: when you sell trust and operations, a breach attacks the product itself. Marks
+  & Spencer, down about −21%, is the operational version — weeks of halted online
+  sales in 2025, where the outage *was* the revenue.
+- **Japan**: KADOKAWA, whose publishing and platform operations were down for weeks,
+  fell about −16% while the rest of the Japanese sample barely moved.
 
-And two Japanese names ended the window positive — Fujitsu and Mitsubishi Electric.
-That is not the market rewarding a breach. It is the honest reminder that a single
-incident's thirty-day window can be swamped by earnings, guidance, or a sector rally.
-The model removes the market; it does not remove everything else.
-
-## The better question
-
-Across both markets, the pattern in the spread is more useful than either average.
-The incidents that kept bleeding have one thing in common: **the breach hit the thing
-the business sells.** Credit data for Equifax. Identity security for Okta. The platform
-itself for KADOKAWA. The ones that recovered fast were bad things that happened to an
+The incidents that recovered fast were, everywhere, bad things that happened to an
 otherwise healthy business whose customers do not switch over it — Marriott, Capital
-One, Toyota, Honda.
+One, Toyota, Honda, Bayer.
 
 So the better question is not "how much does a breach cost the stock" but "**does this
 breach attack the company's reason to exist?**" That is the line between a dip and a
-re-rating, and it holds in Tokyo as well as New York.
+re-rating, and it holds in New York, Tokyo, and London alike.
+
+## When the model lies to you
+
+Four of the twenty-four ended the window *positive*: EasyJet (+20%), Maersk (+6%),
+Norsk Hydro (+5%), and Mitsubishi Electric. That is not the market rewarding a breach.
+It is the honest limit of the method.
+
+EasyJet disclosed its breach in May 2020, in the middle of the most violent airline
+re-rating in living memory as COVID lockdowns began to lift; the thirty-day window is
+swamped by that, not by the breach. Maersk's NotPetya hit during a shipping-rate
+recovery, and NotPetya was a global wiper, not a Maersk-specific signal. Norsk Hydro
+is the interesting one: its transparent, textbook incident response became a case
+study, and the stock held. The model removes the market; it does not remove earnings,
+a sector rally, or a company's own crisis handling.
 
 ## The caveats, stated plainly
 
-I would not use these averages in a slide without these:
-
 - **Hand-picked, severe cases.** Not random, so the averages overstate the typical
   incident. Most breaches at most companies barely register. These were chosen because
-  they are legible, not representative — and the Japanese sample is small.
+  they are legible, not representative; the samples are small, especially Japan.
 - **Correlation is not causation.** The market model removes the market, not every
-  confounder. An earnings miss in the same window rides along in the "abnormal" return.
+  confounder — see the positive four above.
 - **Disclosure date is not incident date.** The market reacts to what it learns, when
   it learns it. day 0 is the disclosure, which can be months after the compromise.
 
@@ -111,17 +115,18 @@ before it is a finance question, and security people are well placed to answer i
 
 Second, it reframes "crown jewels." The assets that move the share price are not the
 ones with the most records. They are the ones whose compromise is an argument against
-the company itself — a security vendor's own build and identity systems, a data
-broker's data, a platform company's platform. Find the asset whose loss would re-rate
-the business, and you have found what actually needs defending first.
+the company itself — a security vendor's own identity systems, an outsourcer's
+operations, a platform company's platform, a data broker's data. Find the asset whose
+loss would re-rate the business, and you have found what actually needs defending
+first.
 
 ## About the visualization
 
 The [dashboard](https://xingelf.github.io/agentic-redteam/viz/breach-stock-impact/)
-shows the average cumulative abnormal return for each market as two lines, each
-incident ranked by its 30-day move, a small chart per incident indexed to its
-disclosure, and the full table of betas and CARs. It is built from public prices and
-public disclosure dates by a short stdlib Python script in the repo
+shows the average cumulative abnormal return for each market as three lines, every
+incident ranked by its 30-day move and colored by market, a small chart per incident
+indexed to its disclosure, and the full table of betas and CARs. It is built from
+public prices and public disclosure dates by a short stdlib Python script in the repo
 ([`scripts/build_breach_stock.py`](https://github.com/xingelf/agentic-redteam/blob/main/scripts/build_breach_stock.py));
 the event windows are closed history, so the data is built once and committed. Public
 data only. For education and analysis, not investment advice.

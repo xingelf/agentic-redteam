@@ -8,6 +8,7 @@ Updated roughly once a week.
 
 | Date | Title | Topic |
 |------|-------|-------|
+| 2026-10-25 | [Red Team, Visualized: There Is No Best LLM for Cyber](posts/2026-10-25_llm-cyber-benchmarks.md) | LLM cyber benchmarks / visualization |
 | 2026-10-18 | [Red Team, Visualized: What a Breach Costs the Share Price](posts/2026-10-18_breach-stock-impact.md) | Security economics / event study |
 | 2026-10-18 | [Red Team, Visualized: The Agentic Kill-Chain](posts/2026-10-18_red-team-visualized-kill-chain.md) | Visualization / ATT&CK |
 | 2026-10-10 | [ARTEX and the Dual-Use Problem We Knew Was Coming](posts/2026-10-10_artex-dual-use.md) | Dual-use / threat intel |
@@ -39,7 +40,8 @@ Interactive, self-contained visualizations built on public frameworks and public
 |-------|---------------|------|--------|
 | The Agentic Kill-Chain | The autonomous offensive loop, stage by stage, with ATT&CK mappings, detection, and defenses | [Pages](https://xingelf.github.io/agentic-redteam/viz/agentic-kill-chain/) | [viz/agentic-kill-chain](viz/agentic-kill-chain/) |
 | Known Exploited Vulnerabilities | Self-updating CISA KEV dashboard — totals, monthly additions, top vendors, newest entries (refreshed daily by GitHub Actions) | [Pages](https://xingelf.github.io/agentic-redteam/viz/kev-dashboard/) | [viz/kev-dashboard](viz/kev-dashboard/) |
-| What a Breach Costs the Share Price | Event study of 16 public-company incidents (US vs Japan) — abnormal returns and CAR around disclosure, stripped of market moves | [Pages](https://xingelf.github.io/agentic-redteam/viz/breach-stock-impact/) | [viz/breach-stock-impact](viz/breach-stock-impact/) |
+| What a Breach Costs the Share Price | Event study of 24 public-company incidents (US, Japan, Europe) — abnormal returns and CAR around disclosure, stripped of market moves | [Pages](https://xingelf.github.io/agentic-redteam/viz/breach-stock-impact/) | [viz/breach-stock-impact](viz/breach-stock-impact/) |
+| No Single Best LLM for Cyber | Three public cyber benchmarks compared — how the lead changes with the metric, agent harness, reasoning mode, and benchmark (primary sources only) | [Pages](https://xingelf.github.io/agentic-redteam/viz/llm-cyber-benchmarks/) | [viz/llm-cyber-benchmarks](viz/llm-cyber-benchmarks/) |
 
 ## Tools
 

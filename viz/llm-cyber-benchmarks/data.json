@@ -1,0 +1,218 @@
+{
+  "generatedAt": "2026-10-18T12:48:58+00:00",
+  "title": "No Single Best LLM for Cyber",
+  "note": "Public benchmark results only, transcribed from the primary papers. Each benchmark measures a different task, so the percentages are not comparable across benchmarks - do not read one axis against another.",
+  "providers": [
+    {
+      "id": "anthropic",
+      "label": "Anthropic"
+    },
+    {
+      "id": "openai",
+      "label": "OpenAI"
+    },
+    {
+      "id": "google",
+      "label": "Google"
+    },
+    {
+      "id": "open",
+      "label": "Open-weight"
+    }
+  ],
+  "cybench": {
+    "name": "Cybench",
+    "tasks": 40,
+    "harness": "Structured bash agent",
+    "source": "Zhang et al., arXiv:2408.08926 (Table 2)",
+    "url": "https://arxiv.org/abs/2408.08926",
+    "metrics": [
+      {
+        "id": "unguided",
+        "label": "Unguided",
+        "desc": "whole task, no hints"
+      },
+      {
+        "id": "guided",
+        "label": "Subtask-guided",
+        "desc": "task solved with subtasks revealed"
+      },
+      {
+        "id": "subtask",
+        "label": "Subtask score",
+        "desc": "fraction of subtasks solved"
+      }
+    ],
+    "models": [
+      {
+        "model": "Claude 3.5 Sonnet",
+        "provider": "anthropic",
+        "unguided": 17.5,
+        "guided": 15.0,
+        "subtask": 43.9
+      },
+      {
+        "model": "GPT-4o",
+        "provider": "openai",
+        "unguided": 12.5,
+        "guided": 17.5,
+        "subtask": 28.7
+      },
+      {
+        "model": "Claude 3 Opus",
+        "provider": "anthropic",
+        "unguided": 10.0,
+        "guided": 12.5,
+        "subtask": 36.8
+      },
+      {
+        "model": "o1-preview",
+        "provider": "openai",
+        "unguided": 10.0,
+        "guided": 10.0,
+        "subtask": 46.8
+      },
+      {
+        "model": "Llama 3.1 405B",
+        "provider": "open",
+        "unguided": 7.5,
+        "guided": 15.0,
+        "subtask": 20.5
+      },
+      {
+        "model": "Mixtral 8x22B",
+        "provider": "open",
+        "unguided": 7.5,
+        "guided": 5.0,
+        "subtask": 15.2
+      },
+      {
+        "model": "Gemini 1.5 Pro",
+        "provider": "google",
+        "unguided": 7.5,
+        "guided": 5.0,
+        "subtask": 11.7
+      },
+      {
+        "model": "Llama 3 70B",
+        "provider": "open",
+        "unguided": 5.0,
+        "guided": 7.5,
+        "subtask": 8.2
+      }
+    ]
+  },
+  "scaffold": {
+    "name": "Agent scaffold",
+    "metricLabel": "Unguided success rate",
+    "source": "Zhang et al., arXiv:2408.08926 (Table 3)",
+    "url": "https://arxiv.org/abs/2408.08926",
+    "harnesses": [
+      "Structured bash",
+      "Action-only",
+      "Pseudoterminal",
+      "Web search"
+    ],
+    "models": [
+      {
+        "model": "Claude 3.5 Sonnet",
+        "provider": "anthropic",
+        "scores": [
+          17.5,
+          15.0,
+          20.0,
+          20.0
+        ]
+      },
+      {
+        "model": "GPT-4o",
+        "provider": "openai",
+        "scores": [
+          17.5,
+          12.5,
+          10.0,
+          15.0
+        ]
+      }
+    ]
+  },
+  "cybergym": {
+    "name": "CyberGym",
+    "tasks": 1507,
+    "harness": "OpenHands agent",
+    "metricLabel": "Level 1 success rate",
+    "source": "Wang et al., arXiv:2506.02548 (Fig. 3-4)",
+    "url": "https://arxiv.org/abs/2506.02548",
+    "unionAll": 27.2,
+    "models": [
+      {
+        "model": "Claude Sonnet 4",
+        "provider": "anthropic",
+        "base": 17.9,
+        "thinking": 19.3
+      },
+      {
+        "model": "Claude 3.7 Sonnet",
+        "provider": "anthropic",
+        "base": 11.9,
+        "thinking": null
+      },
+      {
+        "model": "GPT-4.1",
+        "provider": "openai",
+        "base": 9.4,
+        "thinking": null
+      },
+      {
+        "model": "GPT-5",
+        "provider": "openai",
+        "base": 7.8,
+        "thinking": 22.0,
+        "baseNote": "minimal reasoning",
+        "thinkNote": "high reasoning"
+      },
+      {
+        "model": "Gemini 2.5 Flash",
+        "provider": "google",
+        "base": 4.8,
+        "thinking": null
+      },
+      {
+        "model": "o4-mini",
+        "provider": "openai",
+        "base": 2.5,
+        "thinking": null
+      },
+      {
+        "model": "Qwen3-235B-A22B",
+        "provider": "open",
+        "base": 1.9,
+        "thinking": null
+      },
+      {
+        "model": "OpenHands-LM-32B",
+        "provider": "open",
+        "base": 1.7,
+        "thinking": null
+      }
+    ]
+  },
+  "cvebench": {
+    "name": "CVE-Bench",
+    "tasks": 40,
+    "metricLabel": "one-day exploit, success@5",
+    "backbone": "GPT-4o backbone",
+    "source": "Zhu, Kang et al., arXiv:2503.17332",
+    "url": "https://arxiv.org/abs/2503.17332",
+    "frameworks": [
+      {
+        "name": "Cy-Agent (single, CTF-style)",
+        "value": 2.5
+      },
+      {
+        "name": "Multi-agent team",
+        "value": 13.0
+      }
+    ]
+  }
+}
