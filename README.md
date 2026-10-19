@@ -26,6 +26,10 @@ Evergreen reference notes on core offensive-security topics.
 | [SQL Injection: How It Works and How to Stop It](security-basics/sql-injection.md) | SQLi overview |
 | [UNION-Based SQL Injection](security-basics/union-based-sqli.md) | SQLi — in-band |
 | [Boolean-Based Blind SQL Injection](security-basics/boolean-sqli.md) | SQLi — blind |
+| [Cross-Site Scripting (XSS): How It Works and How to Stop It](security-basics/xss.md) | XSS / injection |
+| [OS Command Injection](security-basics/command-injection.md) | Command injection |
+| [Server-Side Request Forgery (SSRF)](security-basics/ssrf.md) | SSRF / cloud metadata |
+| [Broken Access Control and IDOR](security-basics/broken-access-control.md) | Access control (OWASP A01) |
 | [jsonpickle: How py/reduce Turns Deserialization into RCE](security-basics/jsonpickle-deserialization.md) | Deserialization (Python) |
 | [ObjectDataProvider: A .NET Deserialization Gadget](security-basics/object-data-provider.md) | Deserialization (.NET) |
 | [XML CDATA, Escaping, and the XXE Trap](security-basics/xml-cdata.md) | XML / XXE |
