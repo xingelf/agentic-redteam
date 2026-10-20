@@ -3,7 +3,7 @@
     "title": "CISA Catalog of Known Exploited Vulnerabilities",
     "catalogVersion": "2026.10.16",
     "dateReleased": "2026-10-16T17:15:48.8752Z",
-    "generatedAt": "2026-10-19T13:14:12Z",
+    "generatedAt": "2026-10-20T11:35:38Z",
     "source": "CISA KEV",
     "sourceUrl": "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json"
   },
