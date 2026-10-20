@@ -34,6 +34,16 @@ Evergreen reference notes on core offensive-security topics.
 | [ObjectDataProvider: A .NET Deserialization Gadget](security-basics/object-data-provider.md) | Deserialization (.NET) |
 | [XML CDATA, Escaping, and the XXE Trap](security-basics/xml-cdata.md) | XML / XXE |
 | [SQL Collation, and Why It Matters for Security](security-basics/sql-collation.md) | Database internals |
+| [Kerberos Authentication, Explained for Attackers](security-basics/kerberos-authentication.md) | Active Directory / Kerberos |
+| [Kerberoasting and AS-REP Roasting](security-basics/kerberoasting.md) | AD — credential access |
+| [Pass-the-Hash, Pass-the-Ticket, and Overpass-the-Hash](security-basics/pass-the-hash-ticket.md) | AD — lateral movement |
+| [Golden and Silver Tickets](security-basics/golden-silver-tickets.md) | AD — Kerberos persistence |
+| [Kerberos Delegation Abuse](security-basics/kerberos-delegation.md) | AD — privilege escalation |
+| [AD ACL Attack Paths and BloodHound](security-basics/ad-acl-attack-paths.md) | AD — privilege escalation |
+| [NTLM Coercion and Relay](security-basics/ntlm-coercion-relay.md) | AD — NTLM / relay |
+| [AD CS Certificate Abuse (ESC1–ESC8)](security-basics/adcs-attacks.md) | AD — certificate services |
+| [Entra ID for Attackers](security-basics/entra-id-attacks.md) | Entra ID / cloud identity |
+| [Hybrid Identity Attacks](security-basics/hybrid-identity-attacks.md) | Hybrid AD / Entra ID |
 | [Expanding a Kali VM Disk (VMware + GParted)](security-basics/kali-disk-expansion.md) | Lab / homelab ops |
 
 ## Visualizations
@@ -46,6 +56,7 @@ Interactive, self-contained visualizations built on public frameworks and public
 | Known Exploited Vulnerabilities | Self-updating CISA KEV dashboard — totals, monthly additions, top vendors, newest entries (refreshed daily by GitHub Actions) | [Pages](https://xingelf.github.io/agentic-redteam/viz/kev-dashboard/) | [viz/kev-dashboard](viz/kev-dashboard/) |
 | What a Breach Costs the Share Price | Event study of 24 public-company incidents (US, Japan, Europe) — abnormal returns and CAR around disclosure, stripped of market moves | [Pages](https://xingelf.github.io/agentic-redteam/viz/breach-stock-impact/) | [viz/breach-stock-impact](viz/breach-stock-impact/) |
 | No Single Best LLM for Cyber | Three public cyber benchmarks compared — how the lead changes with the metric, agent harness, reasoning mode, and benchmark (primary sources only) | [Pages](https://xingelf.github.io/agentic-redteam/viz/llm-cyber-benchmarks/) | [viz/llm-cyber-benchmarks](viz/llm-cyber-benchmarks/) |
+| The Kerberos Attack Map | One Kerberos exchange with five AD attacks overlaid — each lighting up the message it cracks, skips, or forges, and the key it relies on | [Pages](https://xingelf.github.io/agentic-redteam/viz/kerberos-attack-map/) | [viz/kerberos-attack-map](viz/kerberos-attack-map/) |
 
 ## Tools
 

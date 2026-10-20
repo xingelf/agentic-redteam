@@ -1,0 +1,369 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>The Kerberos Attack Map</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+  /* One Kerberos exchange, five attacks laid over it. Pick an attack and the
+     message it abuses, skips, or forges lights up. Self-contained; model inlined. */
+  :root {
+    --bg: #e7e6e2; --surface: #f2f1ed; --surface-2: #dddbd4;
+    --fg: #222528; --muted: #6a6d72; --line: #c9c7c0;
+    --accent: #45586b; --attacker: #99493a; --ok: #3d6d63;
+    --radius: 10px;
+    --display: "Fraunces", Georgia, "Times New Roman", serif;
+    --body: "IBM Plex Sans", system-ui, -apple-system, Segoe UI, sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #15171a; --surface: #1c1f23; --surface-2: #23272c;
+      --fg: #e6e5e1; --muted: #9aa0a6; --line: #313640;
+      --accent: #8aa0b5; --attacker: #c9775f; --ok: #6fb3a2;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #15171a; --surface: #1c1f23; --surface-2: #23272c;
+    --fg: #e6e5e1; --muted: #9aa0a6; --line: #313640;
+    --accent: #8aa0b5; --attacker: #c9775f; --ok: #6fb3a2;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--body); line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  .wrap {
+    max-width: 1080px; margin: 0 auto;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: clamp(1.5rem, 4vw, 3rem);
+  }
+
+  header { margin-bottom: 1.4rem; }
+  .eyebrow { font-family: var(--mono); font-size: .72rem; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); margin: 0 0 .5rem; }
+  h1 { font-family: var(--display); font-weight: 500; font-size: clamp(1.9rem, 5vw, 3rem); line-height: 1.05; letter-spacing: -.01em; text-wrap: balance; margin: 0 0 .6rem; }
+  .dek { max-width: 64ch; color: var(--muted); font-size: 1.02rem; margin: 0 0 1rem; }
+  .note { max-width: 64ch; font-size: .82rem; color: var(--muted); border-left: 2px solid var(--line); padding-left: .75rem; margin: 0; }
+
+  /* Attack selector */
+  .picker { display: flex; flex-wrap: wrap; gap: .5rem; margin: 1.3rem 0 1.4rem; }
+  .picker button {
+    appearance: none; cursor: pointer;
+    font-family: var(--mono); font-size: .78rem; letter-spacing: .02em;
+    padding: .45rem .8rem; border-radius: 999px;
+    border: 1px solid var(--line); background: var(--surface); color: var(--muted);
+    transition: border-color .15s ease, color .15s ease, background .15s ease;
+  }
+  .picker button:hover { border-color: var(--muted); color: var(--fg); }
+  .picker button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .picker button[aria-pressed="true"] { color: var(--bg); background: var(--fg); border-color: var(--fg); }
+  .picker button.atk[aria-pressed="true"] { background: var(--attacker); border-color: var(--attacker); color: #fff; }
+
+  .explorer { display: grid; grid-template-columns: 1.15fr .85fr; gap: clamp(1rem, 3vw, 1.8rem); align-items: start; }
+  @media (max-width: 860px) { .explorer { grid-template-columns: 1fr; } }
+
+  .diagram { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 1rem 1rem .6rem; min-width: 0; }
+  svg { display: block; width: 100%; height: auto; overflow: visible; }
+
+  .actor-box { fill: var(--surface-2); stroke: var(--line); }
+  .actor-label { fill: var(--fg); font-family: var(--mono); font-size: 12px; font-weight: 500; text-anchor: middle; }
+  .actor-sub { fill: var(--muted); font-family: var(--mono); font-size: 9.5px; text-anchor: middle; }
+  .lifeline { stroke: var(--line); stroke-width: 1; stroke-dasharray: 3 4; }
+
+  .msg-line { stroke: var(--muted); stroke-width: 1.6; fill: none; }
+  .msg-head { fill: var(--muted); stroke: none; }
+  .msg-label { fill: var(--fg); font-family: var(--mono); font-size: 11px; font-weight: 500; }
+  .msg-sub { fill: var(--muted); font-family: var(--body); font-size: 10.5px; }
+
+  /* states */
+  .step.target .msg-line { stroke: var(--attacker); stroke-width: 2.6; }
+  .step.target .msg-head { fill: var(--attacker); }
+  .step.target .msg-label { fill: var(--attacker); font-weight: 600; }
+  .step.bypass { opacity: .32; }
+  .step.bypass .msg-line { stroke-dasharray: 4 4; }
+  .badge-box { fill: var(--attacker); }
+  .badge-text { fill: #fff; font-family: var(--mono); font-size: 10px; font-weight: 500; }
+  .tag { font-family: var(--mono); font-size: 9.5px; }
+  .tag.attacker { fill: var(--attacker); }
+
+  .legend { display: flex; flex-wrap: wrap; gap: .3rem 1rem; margin-top: .6rem; font-size: .74rem; color: var(--muted); font-family: var(--mono); }
+  .legend span { display: inline-flex; align-items: center; gap: .35rem; }
+  .legend i { width: 18px; height: 0; border-top-width: 2.4px; border-top-style: solid; display: inline-block; }
+  .legend i.normal { border-color: var(--muted); }
+  .legend i.target { border-color: var(--attacker); }
+  .legend i.bypass { border-top-style: dashed; border-color: var(--muted); opacity: .5; }
+
+  .keys { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .8rem; }
+  .keychip { font-family: var(--mono); font-size: .72rem; color: var(--muted); border: 1px solid var(--line); border-radius: 6px; padding: .2rem .5rem; background: var(--bg); }
+  .keychip.on { color: #fff; background: var(--attacker); border-color: var(--attacker); }
+
+  /* Panel */
+  .panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: clamp(1.1rem, 3vw, 1.5rem); min-width: 0; }
+  .panel h2 { font-family: var(--display); font-weight: 500; font-size: clamp(1.3rem, 3.5vw, 1.7rem); margin: 0 0 .15rem; letter-spacing: -.01em; }
+  .panel .tagline { font-family: var(--mono); font-size: .74rem; color: var(--muted); margin: 0 0 .2rem; }
+  .panel .tagline.attacker { color: var(--attacker); }
+  .block { border-top: 1px solid var(--line); padding-top: .8rem; margin-top: .8rem; }
+  .block:first-of-type { border-top: 0; padding-top: 0; margin-top: .9rem; }
+  .block h3 { font-family: var(--mono); font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin: 0 0 .35rem; }
+  .block p { margin: 0; font-size: .94rem; }
+  .meta { display: grid; grid-template-columns: auto 1fr; gap: .25rem .8rem; font-size: .86rem; }
+  .meta dt { font-family: var(--mono); font-size: .72rem; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+  .meta dd { margin: 0; }
+  .reading a { color: var(--accent); text-decoration: none; font-size: .9rem; border-bottom: 1px solid transparent; }
+  .reading a:hover { border-bottom-color: var(--accent); }
+
+  footer { margin-top: 2.4rem; border-top: 1px solid var(--line); padding-top: 1rem; color: var(--muted); font-size: .8rem; }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+  footer p { margin: .3rem 0; max-width: 72ch; }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Red Team, Visualized &middot; 05</p>
+    <h1>The Kerberos Attack Map</h1>
+    <p class="dek">Active Directory's best-known attacks are not separate tricks &mdash; they are each an attack on one step of the same Kerberos exchange. Here is the three-party flow once; pick an attack and watch which message it cracks, which it skips, and which key it leans on. The pattern underneath is always the same: a key is a password hash, and a ticket is trusted by whoever can decrypt it.</p>
+    <p class="note">An illustrative teaching model for authorized testing and defense. No tooling payloads, no target or engagement data. Each attack links to its write-up in the repo.</p>
+  </header>
+
+  <div class="picker" id="picker" role="tablist" aria-label="Select an attack to overlay"></div>
+
+  <div class="explorer">
+    <div>
+      <div class="diagram">
+        <div id="svgHost" aria-live="polite"></div>
+      </div>
+      <div class="legend">
+        <span><i class="normal"></i> normal message</span>
+        <span><i class="target"></i> cracked / forged here</span>
+        <span><i class="bypass"></i> skipped</span>
+      </div>
+      <div class="keys" id="keys" aria-label="Key the attack relies on"></div>
+    </div>
+
+    <section class="panel" id="panel">
+      <p class="tagline" id="p-tag"></p>
+      <h2 id="p-name"></h2>
+      <div id="p-body"></div>
+    </section>
+  </div>
+
+  <footer>
+    <p>The flow is standard Kerberos: AS exchange &rarr; ticket-granting ticket, TGS exchange &rarr; service ticket, then AP-REQ to the service. Read the <a href="https://github.com/xingelf/agentic-redteam/blob/main/security-basics/kerberos-authentication.md" target="_blank" rel="noopener">Kerberos authentication note</a> for the full walkthrough.</p>
+    <p>Sources: MITRE ATT&amp;CK (T1558 and sub-techniques), the repo's Active Directory security-basics notes. Representative, not exhaustive.</p>
+    <p>Part of the <em>Red Team, Visualized</em> series &middot; <a href="https://github.com/xingelf/agentic-redteam" target="_blank" rel="noopener">github.com/xingelf/agentic-redteam</a></p>
+  </footer>
+</div>
+
+<script>
+  var REPO = "https://github.com/xingelf/agentic-redteam/blob/main/security-basics/";
+
+  // The five messages of the Kerberos exchange, in time order (top to bottom).
+  var STEPS = [
+    { id: "as-req",  from: "client", to: "kdc",     label: "AS-REQ",  sub: "pre-auth: timestamp encrypted with your key" },
+    { id: "as-rep",  from: "kdc",    to: "client",  label: "AS-REP → TGT", sub: "TGT encrypted with the krbtgt key" },
+    { id: "tgs-req", from: "client", to: "kdc",     label: "TGS-REQ", sub: "present TGT, request a service (SPN)" },
+    { id: "tgs-rep", from: "kdc",    to: "client",  label: "TGS-REP → service ticket", sub: "ticket encrypted with the service key" },
+    { id: "ap-req",  from: "client", to: "service", label: "AP-REQ",  sub: "present the service ticket to the service" }
+  ];
+
+  var KEYS = [
+    { id: "user", label: "User key" },
+    { id: "krbtgt", label: "krbtgt key" },
+    { id: "service", label: "Service key" },
+    { id: "stolen", label: "Stolen ticket" }
+  ];
+
+  // Each attack says which steps are targeted (cracked/forged), which are skipped,
+  // where to drop a forge/inject badge, and which key it relies on.
+  var ATTACKS = [
+    {
+      id: "normal", atk: false, name: "Normal flow", key: null,
+      tagline: "Kerberos as designed",
+      target: [], bypass: [], badge: null,
+      what: "No attack. You prove yourself to the KDC once (AS), trade the resulting TGT for a service ticket (TGS), and present that ticket to the service (AP-REQ). Every attack on this page abuses one of these five messages.",
+      meta: [["Prereq", "—"], ["Relies on", "—"], ["ATT&CK", "—"]],
+      detect: "This is the baseline the attacks deviate from.",
+      note: null, noteLabel: null
+    },
+    {
+      id: "asrep", atk: true, name: "AS-REP Roasting", key: "user",
+      tagline: "ATT&CK T1558.004 · credential access",
+      target: ["as-rep"], bypass: ["as-req"], badge: null,
+      what: "For an account with pre-authentication disabled, the KDC returns an AS-REP to anyone who asks — and part of it is encrypted with the account's key. Capture it and crack offline to recover the password. No valid credentials needed if you can name the accounts.",
+      meta: [["Prereq", "Account with “do not require pre-auth”"], ["Relies on", "User key (in the AS-REP)"], ["ATT&CK", "T1558.004"]],
+      detect: "Require pre-authentication on every account; alert on AS-REQs with no pre-auth and on offline-crackable AS-REPs being requested.",
+      note: "kerberoasting.md", noteLabel: "Kerberoasting and AS-REP Roasting"
+    },
+    {
+      id: "kerberoast", atk: true, name: "Kerberoasting", key: "service",
+      tagline: "ATT&CK T1558.003 · credential access",
+      target: ["tgs-rep"], bypass: [], badge: null,
+      what: "Any domain user can request a service ticket for any SPN. The ticket is encrypted with the service account's key, and the KDC hands it over without checking you can use the service. Crack it offline to recover the service account's password — often a high-privilege account.",
+      meta: [["Prereq", "Any authenticated domain user"], ["Relies on", "Service key (in the service ticket)"], ["ATT&CK", "T1558.003"]],
+      detect: "Long/gMSA passwords and AES-only make cracking infeasible; alert on bulk TGS requests, especially RC4 (etype 0x17), from one principal.",
+      note: "kerberoasting.md", noteLabel: "Kerberoasting and AS-REP Roasting"
+    },
+    {
+      id: "golden", atk: true, name: "Golden Ticket", key: "krbtgt",
+      tagline: "ATT&CK T1558.001 · persistence",
+      target: [], bypass: ["as-req", "as-rep"], badge: { after: "as-rep", text: "⚒ forge TGT with krbtgt key" },
+      what: "The krbtgt key signs every TGT, and a DC trusts any TGT it can decrypt — it never checks the TGT was really issued. With the krbtgt hash you forge a TGT for anyone, in any group, for any lifetime, skipping the AS exchange entirely. Password resets do not evict it.",
+      meta: [["Prereq", "krbtgt hash (post domain-compromise)"], ["Relies on", "krbtgt key"], ["ATT&CK", "T1558.001"]],
+      detect: "Guard krbtgt; on suspicion reset it twice (with replication between). Hunt TGTs with odd lifetimes or accounts that do not exist.",
+      note: "golden-silver-tickets.md", noteLabel: "Golden and Silver Tickets"
+    },
+    {
+      id: "silver", atk: true, name: "Silver Ticket", key: "service",
+      tagline: "ATT&CK T1558.002 · persistence",
+      target: ["ap-req"], bypass: ["as-req", "as-rep", "tgs-req", "tgs-rep"], badge: { after: "tgs-rep", text: "⚒ forge service ticket with service key" },
+      what: "A service validates its ticket locally and never calls the KDC. With a service (or computer) account's key you forge a service ticket and go straight to AP-REQ — no DC contact at all. Scoped to one service, but stealthier: the KDC logs never see it.",
+      meta: [["Prereq", "Service / computer account key"], ["Relies on", "Service key"], ["ATT&CK", "T1558.002"]],
+      detect: "Service-account hygiene (gMSA, AES) raises the bar; a 4769 with no preceding 4768, or a service seeing a ticket the KDC never issued, is the signal.",
+      note: "golden-silver-tickets.md", noteLabel: "Golden and Silver Tickets"
+    },
+    {
+      id: "ptt", atk: true, name: "Pass-the-Ticket", key: "stolen",
+      tagline: "ATT&CK T1550.003 · lateral movement",
+      target: ["as-rep", "tgs-rep"], bypass: ["as-req", "tgs-req"], badge: { after: "as-rep", text: "⬑ inject ticket stolen from memory" },
+      what: "No forging and no cracking: steal a real TGT or service ticket from LSASS on a host you control and inject it into your own session. You skip the authentication that produced it and simply reuse the valid ticket until it expires.",
+      meta: [["Prereq", "Admin on a host with cached tickets"], ["Relies on", "A stolen, still-valid ticket"], ["ATT&CK", "T1550.003"]],
+      detect: "Protect LSASS (Credential Guard, PPL); watch for tickets used from a host other than the one they were issued on, and tier admin logons.",
+      note: "pass-the-hash-ticket.md", noteLabel: "Pass-the-Hash, Pass-the-Ticket, Overpass-the-Hash"
+    }
+  ];
+
+  var LANES = { client: 120, kdc: 390, service: 640 };
+  var LANE_LABELS = {
+    client: ["Client", "(you / attacker)"],
+    kdc: ["KDC", "(domain controller)"],
+    service: ["Service", "(SPN target)"]
+  };
+  var W = 760, TOP = 40, BOXH = 40, LIFE_TOP = 84, LIFE_BOT = 408;
+  // y position of each message (ap-req sits lower, after a gap)
+  var MSG_Y = { "as-req": 128, "as-rep": 172, "tgs-req": 232, "tgs-rep": 276, "ap-req": 360 };
+
+  var current = 0;
+  var pickerEl = document.getElementById("picker");
+  var svgHost = document.getElementById("svgHost");
+  var keysEl = document.getElementById("keys");
+  var tagEl = document.getElementById("p-tag");
+  var nameEl = document.getElementById("p-name");
+  var bodyEl = document.getElementById("p-body");
+
+  function esc(s) { return String(s).replace(/[&<>]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]; }); }
+
+  function arrow(x1, x2, y, cls) {
+    var dir = x2 > x1 ? 1 : -1;
+    var tip = x2 - dir * 2;
+    var head = "M" + tip + " " + y + " L" + (tip - dir * 8) + " " + (y - 4) + " L" + (tip - dir * 8) + " " + (y + 4) + " Z";
+    return '<line class="msg-line" x1="' + x1 + '" y1="' + y + '" x2="' + (x2 - dir * 7) + '" y2="' + y + '"/>' +
+           '<path class="msg-head" d="' + head + '"/>';
+  }
+
+  function stepClass(a, id) {
+    if (a.target.indexOf(id) >= 0) return "step target";
+    if (a.bypass.indexOf(id) >= 0) return "step bypass";
+    return "step";
+  }
+
+  function render() {
+    var a = ATTACKS[current];
+
+    // actor boxes + lifelines
+    var actors = "";
+    Object.keys(LANES).forEach(function (k) {
+      var x = LANES[k], bw = 120;
+      actors +=
+        '<rect class="actor-box" x="' + (x - bw / 2) + '" y="' + TOP + '" width="' + bw + '" height="' + BOXH + '" rx="7"/>' +
+        '<text class="actor-label" x="' + x + '" y="' + (TOP + 17) + '">' + esc(LANE_LABELS[k][0]) + '</text>' +
+        '<text class="actor-sub" x="' + x + '" y="' + (TOP + 31) + '">' + esc(LANE_LABELS[k][1]) + '</text>' +
+        '<line class="lifeline" x1="' + x + '" y1="' + LIFE_TOP + '" x2="' + x + '" y2="' + LIFE_BOT + '"/>';
+    });
+
+    // messages
+    var msgs = STEPS.map(function (s) {
+      var x1 = LANES[s.from], x2 = LANES[s.to], y = MSG_Y[s.id];
+      var midX = (x1 + x2) / 2;
+      var cls = stepClass(a, s.id);
+      return '<g class="' + cls + '">' +
+        arrow(x1, x2, y, cls) +
+        '<text class="msg-label" x="' + midX + '" y="' + (y - 7) + '" text-anchor="middle">' + esc(s.label) + '</text>' +
+        '<text class="msg-sub" x="' + midX + '" y="' + (y + 14) + '" text-anchor="middle">' + esc(s.sub) + '</text>' +
+        '</g>';
+    }).join("");
+
+    // forge / inject badge on the client lifeline
+    var badge = "";
+    if (a.badge) {
+      var by = MSG_Y[a.badge.after] + 26;
+      var bx = LANES.client, tw = a.badge.text.length * 6.0 + 16;
+      badge =
+        '<rect class="badge-box" x="' + (bx - 6) + '" y="' + (by - 11) + '" width="' + tw + '" height="18" rx="4"/>' +
+        '<text class="badge-text" x="' + (bx + 2) + '" y="' + (by + 2) + '">' + esc(a.badge.text) + '</text>';
+    }
+
+    svgHost.innerHTML =
+      '<svg viewBox="0 0 ' + W + ' 430" role="img" aria-label="Kerberos message flow with ' + esc(a.name) + ' overlaid">' +
+      actors + msgs + badge + '</svg>';
+
+    // key chips
+    keysEl.innerHTML = KEYS.map(function (k) {
+      return '<span class="keychip' + (a.key === k.id ? " on" : "") + '">' + esc(k.label) + '</span>';
+    }).join("");
+
+    // panel
+    tagEl.textContent = a.tagline;
+    tagEl.className = "tagline" + (a.atk ? " attacker" : "");
+    nameEl.textContent = a.name;
+
+    var metaHtml = '<dl class="meta">' + a.meta.map(function (m) {
+      return '<dt>' + esc(m[0]) + '</dt><dd>' + esc(m[1]) + '</dd>';
+    }).join("") + '</dl>';
+    var readHtml = a.note
+      ? '<div class="block"><h3>Read more</h3><div class="reading"><a href="' + REPO + a.note + '" target="_blank" rel="noopener">' + esc(a.noteLabel) + ' ↗</a></div></div>'
+      : "";
+
+    bodyEl.innerHTML =
+      '<div class="block"><h3>' + (a.atk ? "What it abuses" : "The flow") + '</h3><p>' + esc(a.what) + '</p></div>' +
+      '<div class="block">' + metaHtml + '</div>' +
+      '<div class="block"><h3>' + (a.atk ? "Detection &amp; defense" : "Note") + '</h3><p>' + esc(a.detect) + '</p></div>' +
+      readHtml;
+  }
+
+  function select(i, focus) {
+    current = i;
+    var btns = pickerEl.querySelectorAll("button");
+    btns.forEach(function (b, idx) {
+      var on = idx === i;
+      b.setAttribute("aria-pressed", on ? "true" : "false");
+      b.setAttribute("aria-selected", on ? "true" : "false");
+      if (on && focus) b.focus();
+    });
+    render();
+  }
+
+  function onKey(e) {
+    var i = parseInt(e.currentTarget.dataset.index, 10);
+    if (e.key === "ArrowRight" || e.key === "ArrowDown") { e.preventDefault(); select((i + 1) % ATTACKS.length, true); }
+    else if (e.key === "ArrowLeft" || e.key === "ArrowUp") { e.preventDefault(); select((i - 1 + ATTACKS.length) % ATTACKS.length, true); }
+  }
+
+  ATTACKS.forEach(function (a, i) {
+    var b = document.createElement("button");
+    b.type = "button";
+    b.setAttribute("role", "tab");
+    b.className = a.atk ? "atk" : "";
+    b.dataset.index = i;
+    b.setAttribute("aria-pressed", i === 0 ? "true" : "false");
+    b.textContent = a.name;
+    b.addEventListener("click", function () { select(i); });
+    b.addEventListener("keydown", onKey);
+    pickerEl.appendChild(b);
+  });
+
+  select(0);
+</script>
