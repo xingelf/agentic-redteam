@@ -1,18 +1,18 @@
 {
   "meta": {
     "title": "CISA Catalog of Known Exploited Vulnerabilities",
-    "catalogVersion": "2026.10.21",
-    "dateReleased": "2026-10-21T14:04:39.8983Z",
-    "generatedAt": "2026-10-23T11:38:07Z",
+    "catalogVersion": "2026.10.23",
+    "dateReleased": "2026-10-23T19:30:18.9209Z",
+    "generatedAt": "2026-10-24T10:59:09Z",
     "source": "CISA KEV",
     "sourceUrl": "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json"
   },
   "stats": {
-    "total": 1754,
-    "addedThisMonth": 24,
-    "addedLast30Days": 33,
+    "total": 1756,
+    "addedThisMonth": 26,
+    "addedLast30Days": 35,
     "ransomwareLinked": 361,
-    "forensicTriageYes": 89
+    "forensicTriageYes": 91
   },
   "addedByMonth": [
     {
@@ -85,7 +85,7 @@
     },
     {
       "month": "2026-10",
-      "count": 24
+      "count": 26
     }
   ],
   "topVendors": [
@@ -139,6 +139,26 @@
     }
   ],
   "recent": [
+    {
+      "cveID": "CVE-2026-114625",
+      "vendorProject": "Arista",
+      "product": "VeloCloud Orchestrator",
+      "vulnerabilityName": "Arista VeloCloud Orchestrator SQL Injection Vulnerability",
+      "dateAdded": "2026-10-23",
+      "dueDate": "2026-10-26",
+      "knownRansomwareCampaignUse": "Unknown",
+      "shortDescription": "Arista VeloCloud Orchestrator on-prem contains a SQL injection vulnerability that may allow a remote attacker to access privileged internal functionality and impact the VCO host. S…"
+    },
+    {
+      "cveID": "CVE-2026-110447",
+      "vendorProject": "Collabora",
+      "product": "Collabora Online – Built-in CODE Server",
+      "vulnerabilityName": "Collabora Online – Built-in CODE Server OS Command Injection Vulnerability",
+      "dateAdded": "2026-10-23",
+      "dueDate": "2026-10-26",
+      "knownRansomwareCampaignUse": "Unknown",
+      "shortDescription": "Collabora Collabora Online – Built-in CODE Server when used within the NextCloud platform contains an OS command injection vulnerability that allows for remote code execution when…"
+    },
     {
       "cveID": "CVE-2026-106931",
       "vendorProject": "EG Secure Solutions",
@@ -518,26 +538,6 @@
       "dueDate": "2026-09-24",
       "knownRansomwareCampaignUse": "Unknown",
       "shortDescription": "Zyxel GS1900 series switches contain a stack-based buffer overflow vulnerability in the CGI program which could allow a LAN-based, unauthenticated attacker to exploit the flaw and…"
-    },
-    {
-      "cveID": "CVE-2025-39964",
-      "vendorProject": "Linux",
-      "product": "Kernel",
-      "vulnerabilityName": "Linux Kernel Race Condition Vulnerability",
-      "dateAdded": "2026-09-18",
-      "dueDate": "2026-09-21",
-      "knownRansomwareCampaignUse": "Unknown",
-      "shortDescription": "Linux Kernel contains a race condition vulnerability which allows concurrent writes to the same AF_ALG socket causing data to be unpredictably interleaved and creating inconsistenc…"
-    },
-    {
-      "cveID": "CVE-2026-53266",
-      "vendorProject": "Linux",
-      "product": "Kernel",
-      "vulnerabilityName": "Linux Kernel Out-of-Bounds Write Vulnerability",
-      "dateAdded": "2026-09-18",
-      "dueDate": "2026-09-21",
-      "knownRansomwareCampaignUse": "Unknown",
-      "shortDescription": "Linux Kernel contains an out-of-bounds write vulnerability in the ebtables SNAT target which allows an ARP sender hardware address rewrite to write directly into a nonlinear socket…"
     }
   ]
 }
