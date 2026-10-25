@@ -3,14 +3,14 @@
     "title": "CISA Catalog of Known Exploited Vulnerabilities",
     "catalogVersion": "2026.10.23",
     "dateReleased": "2026-10-23T19:30:18.9209Z",
-    "generatedAt": "2026-10-24T10:59:09Z",
+    "generatedAt": "2026-10-25T11:28:03Z",
     "source": "CISA KEV",
     "sourceUrl": "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json"
   },
   "stats": {
     "total": 1756,
     "addedThisMonth": 26,
-    "addedLast30Days": 35,
+    "addedLast30Days": 33,
     "ransomwareLinked": 361,
     "forensicTriageYes": 91
   },
