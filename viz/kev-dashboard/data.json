@@ -1,18 +1,18 @@
 {
   "meta": {
     "title": "CISA Catalog of Known Exploited Vulnerabilities",
-    "catalogVersion": "2026.10.23",
-    "dateReleased": "2026-10-23T19:30:18.9209Z",
-    "generatedAt": "2026-10-26T13:01:35Z",
+    "catalogVersion": "2026.10.26",
+    "dateReleased": "2026-10-26T22:24:24.6101Z",
+    "generatedAt": "2026-10-27T12:10:48Z",
     "source": "CISA KEV",
     "sourceUrl": "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json"
   },
   "stats": {
-    "total": 1756,
-    "addedThisMonth": 26,
-    "addedLast30Days": 30,
+    "total": 1758,
+    "addedThisMonth": 28,
+    "addedLast30Days": 32,
     "ransomwareLinked": 361,
-    "forensicTriageYes": 91
+    "forensicTriageYes": 93
   },
   "addedByMonth": [
     {
@@ -85,7 +85,7 @@
     },
     {
       "month": "2026-10",
-      "count": 26
+      "count": 28
     }
   ],
   "topVendors": [
@@ -139,6 +139,26 @@
     }
   ],
   "recent": [
+    {
+      "cveID": "CVE-2026-109618",
+      "vendorProject": "PHP Group",
+      "product": "PHP",
+      "vulnerabilityName": "PHP Memory Corruption Vulnerability",
+      "dateAdded": "2026-10-26",
+      "dueDate": "2026-10-29",
+      "knownRansomwareCampaignUse": "Unknown",
+      "shortDescription": "PHP contains an out-of-memory corruption vulnerability that allows for unauthenticated remote code execution."
+    },
+    {
+      "cveID": "CVE-2026-109619",
+      "vendorProject": "PHP Group",
+      "product": "PHP",
+      "vulnerabilityName": "PHP Stale Internal Request-State Vulnerability",
+      "dateAdded": "2026-10-26",
+      "dueDate": "2026-10-29",
+      "knownRansomwareCampaignUse": "Unknown",
+      "shortDescription": "PHP contains a stale internal request-state vulnerability that allows for unauthenticated remote code execution."
+    },
     {
       "cveID": "CVE-2026-114625",
       "vendorProject": "Arista",
@@ -518,26 +538,6 @@
       "dueDate": "2026-09-25",
       "knownRansomwareCampaignUse": "Unknown",
       "shortDescription": "Check Point Security Management Server, Multi-Domain Security Management Server, Log Server, Multi-Domain Log Server, and SmartEvent contain a path traversal vulnerability that all…"
-    },
-    {
-      "cveID": "CVE-2026-85102",
-      "vendorProject": "Check Point",
-      "product": "Multiple Products",
-      "vulnerabilityName": "Check Point Multiple Products Improper Certificate Validation Vulnerability",
-      "dateAdded": "2026-09-22",
-      "dueDate": "2026-09-25",
-      "knownRansomwareCampaignUse": "Unknown",
-      "shortDescription": "Check Point Security Gateway and Check Point Spark Firewall using Site to Site VPN or Remote Access VPN contain an improper certificate validation vulnerability which could allow a…"
-    },
-    {
-      "cveID": "CVE-2026-7273",
-      "vendorProject": "Zyxel",
-      "product": "GS1900 Series Switches",
-      "vulnerabilityName": "Zyxel GS1900 Series Switches Stack-Based Buffer Overflow Vulnerability",
-      "dateAdded": "2026-09-21",
-      "dueDate": "2026-09-24",
-      "knownRansomwareCampaignUse": "Unknown",
-      "shortDescription": "Zyxel GS1900 series switches contain a stack-based buffer overflow vulnerability in the CGI program which could allow a LAN-based, unauthenticated attacker to exploit the flaw and…"
     }
   ]
 }
