@@ -1,15 +1,15 @@
 {
   "meta": {
     "title": "CISA Catalog of Known Exploited Vulnerabilities",
-    "catalogVersion": "2026.10.26",
-    "dateReleased": "2026-10-26T22:24:24.6101Z",
-    "generatedAt": "2026-10-27T12:10:48Z",
+    "catalogVersion": "2026.10.27",
+    "dateReleased": "2026-10-27T19:00:02.2307Z",
+    "generatedAt": "2026-10-28T12:54:19Z",
     "source": "CISA KEV",
     "sourceUrl": "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json"
   },
   "stats": {
-    "total": 1758,
-    "addedThisMonth": 28,
+    "total": 1760,
+    "addedThisMonth": 30,
     "addedLast30Days": 32,
     "ransomwareLinked": 361,
     "forensicTriageYes": 93
@@ -85,7 +85,7 @@
     },
     {
       "month": "2026-10",
-      "count": 28
+      "count": 30
     }
   ],
   "topVendors": [
@@ -103,11 +103,11 @@
     },
     {
       "vendor": "Adobe",
-      "count": 82
+      "count": 83
     },
     {
       "vendor": "Google",
-      "count": 75
+      "count": 76
     },
     {
       "vendor": "Oracle",
@@ -139,6 +139,26 @@
     }
   ],
   "recent": [
+    {
+      "cveID": "CVE-2026-48356",
+      "vendorProject": "Adobe",
+      "product": "Commerce and Magento",
+      "vulnerabilityName": "Adobe Commerce and Magento Unrestricted Upload of File with Dangerous Type Vulnerability",
+      "dateAdded": "2026-10-27",
+      "dueDate": "2026-11-10",
+      "knownRansomwareCampaignUse": "Unknown",
+      "shortDescription": "Adobe Commerce and Magento contain an unrestricted upload of file with dangerous type vulnerability that could result in arbitrary code execution in the context of the current user…"
+    },
+    {
+      "cveID": "CVE-2026-111497",
+      "vendorProject": "Google",
+      "product": "Brotli",
+      "vulnerabilityName": "Google Brotli Unchecked Return Value Vulnerability",
+      "dateAdded": "2026-10-27",
+      "dueDate": "2026-11-10",
+      "knownRansomwareCampaignUse": "Unknown",
+      "shortDescription": "Google Brotli contains an unchecked return value vulnerability that allows a remote unauthenticated attacker to corrupt adjacent decoder state memory, disclose sensitive memory con…"
+    },
     {
       "cveID": "CVE-2026-109618",
       "vendorProject": "PHP Group",
@@ -518,26 +538,6 @@
       "dueDate": "2026-09-25",
       "knownRansomwareCampaignUse": "Unknown",
       "shortDescription": "Arista VeloCloud Orchestrator (VCO) on-prem contains an improper input validation vulnerability that may allow a remote attacker to access privileged internal functionality and imp…"
-    },
-    {
-      "cveID": "CVE-2026-94127",
-      "vendorProject": "F5",
-      "product": "BIG-IP APM",
-      "vulnerabilityName": "F5 BIG-IP APM Heap-based Buffer Overflow Vulnerability",
-      "dateAdded": "2026-09-22",
-      "dueDate": "2026-09-25",
-      "knownRansomwareCampaignUse": "Unknown",
-      "shortDescription": "F5 BIG-IP APM contains a heap-based buffer overflow vulnerability when access policy and an OAuth profile are configured on a virtual server. This vulnerability could allow an unau…"
-    },
-    {
-      "cveID": "CVE-2026-93616",
-      "vendorProject": "Check Point",
-      "product": "Multiple Products",
-      "vulnerabilityName": "Check Point Multiple Products Path Traversal Vulnerability",
-      "dateAdded": "2026-09-22",
-      "dueDate": "2026-09-25",
-      "knownRansomwareCampaignUse": "Unknown",
-      "shortDescription": "Check Point Security Management Server, Multi-Domain Security Management Server, Log Server, Multi-Domain Log Server, and SmartEvent contain a path traversal vulnerability that all…"
     }
   ]
 }
