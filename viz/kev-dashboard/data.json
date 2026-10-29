@@ -1,18 +1,18 @@
 {
   "meta": {
     "title": "CISA Catalog of Known Exploited Vulnerabilities",
-    "catalogVersion": "2026.10.27",
-    "dateReleased": "2026-10-27T19:00:02.2307Z",
-    "generatedAt": "2026-10-28T12:54:19Z",
+    "catalogVersion": "2026.10.28",
+    "dateReleased": "2026-10-28T19:00:04.8077Z",
+    "generatedAt": "2026-10-29T12:59:48Z",
     "source": "CISA KEV",
     "sourceUrl": "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json"
   },
   "stats": {
-    "total": 1760,
-    "addedThisMonth": 30,
-    "addedLast30Days": 32,
+    "total": 1762,
+    "addedThisMonth": 32,
+    "addedLast30Days": 34,
     "ransomwareLinked": 361,
-    "forensicTriageYes": 93
+    "forensicTriageYes": 94
   },
   "addedByMonth": [
     {
@@ -85,7 +85,7 @@
     },
     {
       "month": "2026-10",
-      "count": 30
+      "count": 32
     }
   ],
   "topVendors": [
@@ -122,12 +122,12 @@
       "count": 36
     },
     {
-      "vendor": "Fortinet",
+      "vendor": "Linux",
       "count": 32
     },
     {
-      "vendor": "Linux",
-      "count": 31
+      "vendor": "Fortinet",
+      "count": 32
     },
     {
       "vendor": "Citrix",
@@ -139,6 +139,26 @@
     }
   ],
   "recent": [
+    {
+      "cveID": "CVE-2026-41709",
+      "vendorProject": "Broadcom",
+      "product": "VMware ESX",
+      "vulnerabilityName": "Broadcom VMWare ESX Insufficient Logging Vulnerability",
+      "dateAdded": "2026-10-28",
+      "dueDate": "2026-11-11",
+      "knownRansomwareCampaignUse": "Unknown",
+      "shortDescription": "Broadcom VMWare ESX contains an insufficient logging vulnerability that could allow a malicious actor with admin access to perform certain operations without being logged."
+    },
+    {
+      "cveID": "CVE-2026-46300",
+      "vendorProject": "Linux",
+      "product": "Kernel",
+      "vulnerabilityName": "Linux Kernel Missing Initialization of a Variable Vulnerability",
+      "dateAdded": "2026-10-28",
+      "dueDate": "2026-10-31",
+      "knownRansomwareCampaignUse": "Unknown",
+      "shortDescription": "Linux Kernel contains a missing initialization of a variable vulnerability that could allow for unintended modification of page-cache-backed data via failure to preserve the shared…"
+    },
     {
       "cveID": "CVE-2026-48356",
       "vendorProject": "Adobe",
@@ -518,26 +538,6 @@
       "dueDate": "2026-09-27",
       "knownRansomwareCampaignUse": "Unknown",
       "shortDescription": "WSO2 API Control Plane, API Manager, Traffic Manager & Universal Gateway contain a path traversal vulnerability that could allow for unrestricted file upload and lead to remote cod…"
-    },
-    {
-      "cveID": "CVE-2026-71362",
-      "vendorProject": "Adobe",
-      "product": "Commerce and Magento ",
-      "vulnerabilityName": "Adobe Commerce and Magento Incorrect Authorization Vulnerability ",
-      "dateAdded": "2026-09-24",
-      "dueDate": "2026-09-27",
-      "knownRansomwareCampaignUse": "Unknown",
-      "shortDescription": "Adobe Commerce and Magento contains an incorrect authorization vulnerability that could allow an attacker to leverage this vulnerability to gain elevated access to sensitive resour…"
-    },
-    {
-      "cveID": "CVE-2026-93952",
-      "vendorProject": "Arista",
-      "product": "VeloCloud Orchestrator",
-      "vulnerabilityName": "Arista VeloCloud Orchestrator Improper Input Validation Vulnerability",
-      "dateAdded": "2026-09-22",
-      "dueDate": "2026-09-25",
-      "knownRansomwareCampaignUse": "Unknown",
-      "shortDescription": "Arista VeloCloud Orchestrator (VCO) on-prem contains an improper input validation vulnerability that may allow a remote attacker to access privileged internal functionality and imp…"
     }
   ]
 }
