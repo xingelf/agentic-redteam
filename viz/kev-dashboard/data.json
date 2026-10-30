@@ -1,18 +1,18 @@
 {
   "meta": {
     "title": "CISA Catalog of Known Exploited Vulnerabilities",
-    "catalogVersion": "2026.10.28",
-    "dateReleased": "2026-10-28T19:00:04.8077Z",
-    "generatedAt": "2026-10-29T12:59:48Z",
+    "catalogVersion": "2026.10.29",
+    "dateReleased": "2026-10-29T19:09:34.4003Z",
+    "generatedAt": "2026-10-30T12:54:44Z",
     "source": "CISA KEV",
     "sourceUrl": "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json"
   },
   "stats": {
-    "total": 1762,
-    "addedThisMonth": 32,
-    "addedLast30Days": 34,
+    "total": 1764,
+    "addedThisMonth": 34,
+    "addedLast30Days": 35,
     "ransomwareLinked": 361,
-    "forensicTriageYes": 94
+    "forensicTriageYes": 95
   },
   "addedByMonth": [
     {
@@ -85,7 +85,7 @@
     },
     {
       "month": "2026-10",
-      "count": 32
+      "count": 34
     }
   ],
   "topVendors": [
@@ -95,7 +95,7 @@
     },
     {
       "vendor": "Cisco",
-      "count": 101
+      "count": 102
     },
     {
       "vendor": "Apple",
@@ -139,6 +139,26 @@
     }
   ],
   "recent": [
+    {
+      "cveID": "CVE-2026-97229",
+      "vendorProject": "GitLab",
+      "product": "Community Edition and Enterprise Edition",
+      "vulnerabilityName": "GitLab Community Edition and Enterprise Edition Integer Overflow or Wraparound Vulnerability",
+      "dateAdded": "2026-10-29",
+      "dueDate": "2026-11-01",
+      "knownRansomwareCampaignUse": "Unknown",
+      "shortDescription": "GitLab Community Edition and Enterprise Edition contain a integer overflow or wraparound vulnerability that could allow an unauthenticated user to execute arbitrary code on the Git…"
+    },
+    {
+      "cveID": "CVE-2026-76418",
+      "vendorProject": "Cisco",
+      "product": "Secure Firewall ASA Software and Cisco Secure FTD Software",
+      "vulnerabilityName": "Cisco Secure Firewall ASA Software and Cisco Secure FTD Software Unchecked Return Value to NULL Pointer Dereference Vulnerability",
+      "dateAdded": "2026-10-29",
+      "dueDate": "2026-11-01",
+      "knownRansomwareCampaignUse": "Unknown",
+      "shortDescription": "Cisco Secure Firewall ASA Software and Cisco Secure FTD Software contains an unchecked return value to NULL pointer dereference vulnerability that could allow an unauthenticated, r…"
+    },
     {
       "cveID": "CVE-2026-41709",
       "vendorProject": "Broadcom",
@@ -518,26 +538,6 @@
       "dueDate": "2026-09-28",
       "knownRansomwareCampaignUse": "Unknown",
       "shortDescription": "Microsoft SharePoint contains a code injection vulnerability which could allow an authorized attacker to execute code over a network."
-    },
-    {
-      "cveID": "CVE-2026-87902",
-      "vendorProject": "WordPress",
-      "product": "Core",
-      "vulnerabilityName": "WordPress Core Remote File Inclusion Vulnerability",
-      "dateAdded": "2026-09-25",
-      "dueDate": "2026-09-28",
-      "knownRansomwareCampaignUse": "Unknown",
-      "shortDescription": "WordPress Core contains a remote file inclusion vulnerability which could allow an unauthenticated attacker to make page-template resolution include a chosen readable local `.php`…"
-    },
-    {
-      "cveID": "CVE-2026-5430",
-      "vendorProject": "WSO2",
-      "product": "Multiple Products",
-      "vulnerabilityName": "WSO2 Multiple Products Path Traversal Vulnerability ",
-      "dateAdded": "2026-09-24",
-      "dueDate": "2026-09-27",
-      "knownRansomwareCampaignUse": "Unknown",
-      "shortDescription": "WSO2 API Control Plane, API Manager, Traffic Manager & Universal Gateway contain a path traversal vulnerability that could allow for unrestricted file upload and lead to remote cod…"
     }
   ]
 }
