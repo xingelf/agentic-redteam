@@ -1,16 +1,16 @@
 {
   "meta": {
     "title": "CISA Catalog of Known Exploited Vulnerabilities",
-    "catalogVersion": "2026.11.03",
-    "dateReleased": "2026-11-03T20:00:24.8741Z",
-    "generatedAt": "2026-11-04T14:31:32Z",
+    "catalogVersion": "2026.11.04",
+    "dateReleased": "2026-11-04T20:00:05.774Z",
+    "generatedAt": "2026-11-05T14:39:03Z",
     "source": "CISA KEV",
     "sourceUrl": "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json"
   },
   "stats": {
-    "total": 1767,
-    "addedThisMonth": 1,
-    "addedLast30Days": 33,
+    "total": 1768,
+    "addedThisMonth": 2,
+    "addedLast30Days": 34,
     "ransomwareLinked": 361,
     "forensicTriageYes": 97
   },
@@ -85,7 +85,7 @@
     },
     {
       "month": "2026-11",
-      "count": 1
+      "count": 2
     }
   ],
   "topVendors": [
@@ -99,7 +99,7 @@
     },
     {
       "vendor": "Apple",
-      "count": 95
+      "count": 96
     },
     {
       "vendor": "Adobe",
@@ -139,6 +139,16 @@
     }
   ],
   "recent": [
+    {
+      "cveID": "CVE-2024-27834",
+      "vendorProject": "Apple",
+      "product": "Multiple Products",
+      "vulnerabilityName": "Apple Multiple Products Improper Authentication Vulnerability",
+      "dateAdded": "2026-11-04",
+      "dueDate": "2026-11-18",
+      "knownRansomwareCampaignUse": "Unknown",
+      "shortDescription": "Apple iOS, iPadOS, macOS, Safari, tvOS and watchOS 10.5 contain an improper authentication vulnerability which could allow an attacker with arbitrary read and write capability to b…"
+    },
     {
       "cveID": "CVE-2026-119977",
       "vendorProject": "WordPress",
@@ -528,16 +538,6 @@
       "dueDate": "2026-10-13",
       "knownRansomwareCampaignUse": "Unknown",
       "shortDescription": "Apple iOS, macOS, and iPadOS contain an out-of-bounds write vulnerability in CoreGraphics that may lead to arbitrary code execution."
-    },
-    {
-      "cveID": "CVE-2026-88772",
-      "vendorProject": "Citrix",
-      "product": "NetScaler",
-      "vulnerabilityName": "Citrix NetScaler Improper Restriction of Operations within the Bounds of a Memory Buffer Vulnerability",
-      "dateAdded": "2026-09-27",
-      "dueDate": "2026-09-30",
-      "knownRansomwareCampaignUse": "Unknown",
-      "shortDescription": "Citrix NetScaler ADC and NetScaler Gateway contain an improper restriction of operations within the bounds of a memory buffer vulnerability that could allow for remote code executi…"
     }
   ]
 }
