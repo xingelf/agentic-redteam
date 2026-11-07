@@ -1,16 +1,16 @@
 {
   "meta": {
     "title": "CISA Catalog of Known Exploited Vulnerabilities",
-    "catalogVersion": "2026.11.04",
-    "dateReleased": "2026-11-04T20:00:05.774Z",
-    "generatedAt": "2026-11-06T14:15:40Z",
+    "catalogVersion": "2026.11.06",
+    "dateReleased": "2026-11-06T19:44:45.1797Z",
+    "generatedAt": "2026-11-07T12:59:31Z",
     "source": "CISA KEV",
     "sourceUrl": "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json"
   },
   "stats": {
-    "total": 1768,
-    "addedThisMonth": 2,
-    "addedLast30Days": 34,
+    "total": 1769,
+    "addedThisMonth": 3,
+    "addedLast30Days": 35,
     "ransomwareLinked": 361,
     "forensicTriageYes": 97
   },
@@ -85,7 +85,7 @@
     },
     {
       "month": "2026-11",
-      "count": 2
+      "count": 3
     }
   ],
   "topVendors": [
@@ -139,6 +139,16 @@
     }
   ],
   "recent": [
+    {
+      "cveID": "CVE-2026-19868",
+      "vendorProject": "SonicWall",
+      "product": "SonicOS SSLVPN",
+      "vulnerabilityName": "SonicWall SonicOS SSLVPN Use of Single-factor Authentication Vulnerability",
+      "dateAdded": "2026-11-06",
+      "dueDate": "2026-11-20",
+      "knownRansomwareCampaignUse": "Unknown",
+      "shortDescription": "SonicWall SonicOS SSLVPN contains a use of single-factor authentication vulnerability that may allow a user with valid credentials for an alternate authentication method to bypass…"
+    },
     {
       "cveID": "CVE-2024-27834",
       "vendorProject": "Apple",
@@ -528,16 +538,6 @@
       "dueDate": "2026-10-03",
       "knownRansomwareCampaignUse": "Unknown",
       "shortDescription": "Cisco Catalyst SD-WAN Manager contains a hex encoding vulnerability that could allow an unauthenticated, remote attacker to access an affected system with privileges of the admin u…"
-    },
-    {
-      "cveID": "CVE-2026-86950",
-      "vendorProject": "Apple",
-      "product": "Multiple Products",
-      "vulnerabilityName": "Apple Multiple Products Out-of-Bounds Write Vulnerability",
-      "dateAdded": "2026-09-29",
-      "dueDate": "2026-10-13",
-      "knownRansomwareCampaignUse": "Unknown",
-      "shortDescription": "Apple iOS, macOS, and iPadOS contain an out-of-bounds write vulnerability in CoreGraphics that may lead to arbitrary code execution."
     }
   ]
 }
