@@ -1,18 +1,18 @@
 {
   "meta": {
     "title": "CISA Catalog of Known Exploited Vulnerabilities",
-    "catalogVersion": "2026.11.09",
-    "dateReleased": "2026-11-09T19:54:37.4945Z",
-    "generatedAt": "2026-11-10T14:52:36Z",
+    "catalogVersion": "2026.11.10",
+    "dateReleased": "2026-11-10T19:03:29.8375Z",
+    "generatedAt": "2026-11-11T14:22:06Z",
     "source": "CISA KEV",
     "sourceUrl": "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json"
   },
   "stats": {
-    "total": 1773,
-    "addedThisMonth": 7,
-    "addedLast30Days": 34,
+    "total": 1779,
+    "addedThisMonth": 13,
+    "addedLast30Days": 40,
     "ransomwareLinked": 361,
-    "forensicTriageYes": 101
+    "forensicTriageYes": 103
   },
   "addedByMonth": [
     {
@@ -85,17 +85,17 @@
     },
     {
       "month": "2026-11",
-      "count": 7
+      "count": 13
     }
   ],
   "topVendors": [
     {
       "vendor": "Microsoft",
-      "count": 390
+      "count": 391
     },
     {
       "vendor": "Cisco",
-      "count": 102
+      "count": 103
     },
     {
       "vendor": "Apple",
@@ -107,7 +107,7 @@
     },
     {
       "vendor": "Google",
-      "count": 76
+      "count": 77
     },
     {
       "vendor": "Oracle",
@@ -139,6 +139,66 @@
     }
   ],
   "recent": [
+    {
+      "cveID": "CVE-2026-124194",
+      "vendorProject": "Microsoft",
+      "product": "Office",
+      "vulnerabilityName": "Microsoft Office Outlook Missing User Interaction for Potentially Unsafe Action Vulnerability",
+      "dateAdded": "2026-11-10",
+      "dueDate": "2026-11-24",
+      "knownRansomwareCampaignUse": "Unknown",
+      "shortDescription": "Microsoft Office Outlook contains a missing user interaction for potentially unsafe action vulnerability that allows an unauthorized attacker to perform spoofing over a network."
+    },
+    {
+      "cveID": "CVE-2026-111793",
+      "vendorProject": "Openwave Messaging Limited",
+      "product": "Webtop Media Transcoder",
+      "vulnerabilityName": "Openwave Messaging Limited Webtop Media Transcoder Incorrect Resource Transfer Between Spheres Vulnerability",
+      "dateAdded": "2026-11-10",
+      "dueDate": "2026-11-24",
+      "knownRansomwareCampaignUse": "Unknown",
+      "shortDescription": "Openwave Messaging Limited Webtop Media Transcoder contains an incorrect resource transfer between spheres vulnerability that may allow an authenticated user to process and convert…"
+    },
+    {
+      "cveID": "CVE-2026-20320",
+      "vendorProject": "Cisco",
+      "product": "BroadWorks",
+      "vulnerabilityName": "Cisco BroadWorks Improper Restriction of XML External Entity Reference Vulnerability",
+      "dateAdded": "2026-11-10",
+      "dueDate": "2026-11-24",
+      "knownRansomwareCampaignUse": "Unknown",
+      "shortDescription": "Cisco BroadWorks contains an improper restriction of XML external entity reference vulnerability that could allow an unauthenticated, remote attacker to read sensitive configuratio…"
+    },
+    {
+      "cveID": "CVE-2026-111560",
+      "vendorProject": "Barracuda Networks",
+      "product": "Multiple Products",
+      "vulnerabilityName": "Barracuda Networks Multiple Products OS Command Injection Vulnerability",
+      "dateAdded": "2026-11-10",
+      "dueDate": "2026-11-13",
+      "knownRansomwareCampaignUse": "Unknown",
+      "shortDescription": "Barracuda Networks Email Security Gateway (ESG), Load Balancer, Application Delivery Controller (ADC), Message Archiver (BMA), WAF Control Center (WCC), Web Application Firewall (W…"
+    },
+    {
+      "cveID": "CVE-2026-116606",
+      "vendorProject": "Barracuda Networks",
+      "product": "Barracuda Email Security Gateway (ESG)",
+      "vulnerabilityName": "Barracuda Networks Email Security Gateway (ESG) Authentication Bypass Using an Alternate Path or Channel Vulnerability",
+      "dateAdded": "2026-11-10",
+      "dueDate": "2026-11-13",
+      "knownRansomwareCampaignUse": "Unknown",
+      "shortDescription": "Barracuda Networks Email Security Gateway (ESG) contains an authentication bypass using an alternate path or channel that could allow an unauthenticated remote attacker to invoke a…"
+    },
+    {
+      "cveID": "CVE-2026-125350",
+      "vendorProject": "Google",
+      "product": "Chromium",
+      "vulnerabilityName": "Google Chromium Use-After-Free Vulnerability",
+      "dateAdded": "2026-11-10",
+      "dueDate": "2026-11-24",
+      "knownRansomwareCampaignUse": "Unknown",
+      "shortDescription": "Google Chromium contains a use-after-free vulnerability in the XML component that could allow a remote attacker to execute arbitrary code inside the sandbox via a specially crafted…"
+    },
     {
       "cveID": "CVE-2026-102895",
       "vendorProject": "GPUStack",
@@ -478,66 +538,6 @@
       "dueDate": "2026-10-16",
       "knownRansomwareCampaignUse": "Unknown",
       "shortDescription": "Microsoft Windows Shell contains a command injection vulnerability that allows an unauthorized attacker to bypass a security feature over a network."
-    },
-    {
-      "cveID": "CVE-2015-5477",
-      "vendorProject": "ISC",
-      "product": "BIND",
-      "vulnerabilityName": " ISC BIND Data Processing Errors Vulnerability",
-      "dateAdded": "2026-10-08",
-      "dueDate": "2026-10-11",
-      "knownRansomwareCampaignUse": "Unknown",
-      "shortDescription": "ISC BIND contains a data processing errors vulnerability that could allow remote attackers to cause a denial of service via TKEY queries."
-    },
-    {
-      "cveID": "CVE-2016-3081",
-      "vendorProject": "Apache",
-      "product": "Struts",
-      "vulnerabilityName": "Apache Struts Command Injection Vulnerability",
-      "dateAdded": "2026-10-08",
-      "dueDate": "2026-10-11",
-      "knownRansomwareCampaignUse": "Unknown",
-      "shortDescription": "Apache Struts contains a command injection vulnerability that could allow remote attackers to execute arbitrary code via method:prefix when Dynamic Method Invocation is enabled."
-    },
-    {
-      "cveID": "CVE-2023-22894",
-      "vendorProject": "Strapi",
-      "product": "Strapi",
-      "vulnerabilityName": "Strapi Cleartext Storage of Sensitive Information Vulnerability",
-      "dateAdded": "2026-10-08",
-      "dueDate": "2026-10-11",
-      "knownRansomwareCampaignUse": "Unknown",
-      "shortDescription": "Strapi contains a cleartext storage of sensitive information vulnerability that could allow attackers with access to the admin panel to discover sensitive user details via the quer…"
-    },
-    {
-      "cveID": "CVE-2021-3199",
-      "vendorProject": "ONLYOFFICE",
-      "product": "Docs",
-      "vulnerabilityName": "ONLYOFFICE Docs Server Path Traversal Vulnerability",
-      "dateAdded": "2026-10-08",
-      "dueDate": "2026-10-11",
-      "knownRansomwareCampaignUse": "Unknown",
-      "shortDescription": "ONLYOFFICE Docs contains a path traversal vulnerability that can occur when JWT is used, via a /.. sequence in an image upload parameter and could allow for remote code execution."
-    },
-    {
-      "cveID": "CVE-2015-3306",
-      "vendorProject": "ProFTPD",
-      "product": "ProFTPD",
-      "vulnerabilityName": "ProFTPD Improper Access Control Vulnerability",
-      "dateAdded": "2026-10-08",
-      "dueDate": "2026-10-11",
-      "knownRansomwareCampaignUse": "Unknown",
-      "shortDescription": "ProFTPD contains an improper access control vulnerability that could allow remote attackers to read and write to arbitrary files via the site cpfr and site cpto commands."
-    },
-    {
-      "cveID": "CVE-2026-88779",
-      "vendorProject": "Citrix",
-      "product": "NetScaler",
-      "vulnerabilityName": "Citrix NetScaler Improper Restriction of Operations within the Bounds of a Memory Buffer Vulnerability",
-      "dateAdded": "2026-10-04",
-      "dueDate": "2026-10-07",
-      "knownRansomwareCampaignUse": "Unknown",
-      "shortDescription": "Citrix NetScaler ADC (formerly Citrix ADC) and Citrix NetScaler Gateway (formerly Citrix Gateway) contain an improper restriction of operations within the bounds of a memory buffer…"
     }
   ]
 }
