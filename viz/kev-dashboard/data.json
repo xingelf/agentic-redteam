@@ -1,18 +1,18 @@
 {
   "meta": {
     "title": "CISA Catalog of Known Exploited Vulnerabilities",
-    "catalogVersion": "2026.11.17",
-    "dateReleased": "2026-11-17T17:53:15.5664Z",
-    "generatedAt": "2026-11-18T15:39:40Z",
+    "catalogVersion": "2026.11.18",
+    "dateReleased": "2026-11-18T19:17:41.0354Z",
+    "generatedAt": "2026-11-19T15:44:16Z",
     "source": "CISA KEV",
     "sourceUrl": "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json"
   },
   "stats": {
-    "total": 1782,
-    "addedThisMonth": 16,
-    "addedLast30Days": 34,
+    "total": 1786,
+    "addedThisMonth": 20,
+    "addedLast30Days": 38,
     "ransomwareLinked": 361,
-    "forensicTriageYes": 105
+    "forensicTriageYes": 108
   },
   "addedByMonth": [
     {
@@ -85,7 +85,7 @@
     },
     {
       "month": "2026-11",
-      "count": 16
+      "count": 20
     }
   ],
   "topVendors": [
@@ -115,7 +115,7 @@
     },
     {
       "vendor": "Apache",
-      "count": 41
+      "count": 42
     },
     {
       "vendor": "Ivanti",
@@ -139,6 +139,46 @@
     }
   ],
   "recent": [
+    {
+      "cveID": "CVE-2024-10441",
+      "vendorProject": "Synology",
+      "product": "DiskStation Manager (DSM)",
+      "vulnerabilityName": "Synology DiskStation Manager (DSM) Improper Encoding or Escaping of Output Vulnerability",
+      "dateAdded": "2026-11-18",
+      "dueDate": "2026-11-21",
+      "knownRansomwareCampaignUse": "Unknown",
+      "shortDescription": "Synology DSM contains an improper encoding or escaping of output vulnerability in the system plugin daemon in Synology BeeStation OS (BSM) that could allow a remote attacker to exe…"
+    },
+    {
+      "cveID": "CVE-2026-40217",
+      "vendorProject": "BerriAI",
+      "product": "LiteLLM",
+      "vulnerabilityName": "BerriAI LiteLLM Unprotected Alternate Channel Vulnerability",
+      "dateAdded": "2026-11-18",
+      "dueDate": "2026-12-02",
+      "knownRansomwareCampaignUse": "Unknown",
+      "shortDescription": "BerriAI LiteLLM contains an unprotected alternate channel vulnerability that could allow remote attackers to execute arbitrary code via bytecode rewriting at the /guardrails/test_c…"
+    },
+    {
+      "cveID": "CVE-2026-90817",
+      "vendorProject": "Vanderbilt University",
+      "product": "Research Electronic Data Capture (REDCap)",
+      "vulnerabilityName": "Vanderbilt University Research Electronic Data Capture (REDCap) Code Injection Vulnerability",
+      "dateAdded": "2026-11-18",
+      "dueDate": "2026-11-21",
+      "knownRansomwareCampaignUse": "Unknown",
+      "shortDescription": "Vanderbilt University Research Electronic Data Capture (REDCap) contains a code injection vulnerability which could allow an unauthenticated attacker to execute arbitrary code on t…"
+    },
+    {
+      "cveID": "CVE-2026-90436",
+      "vendorProject": "Apache",
+      "product": "Axis",
+      "vulnerabilityName": "Apache Axis Unsafe Reflection Vulnerability",
+      "dateAdded": "2026-11-18",
+      "dueDate": "2026-11-21",
+      "knownRansomwareCampaignUse": "Unknown",
+      "shortDescription": "Apache Axis contains an unsafe reflection vulnerability that could allow an unauthenticated remote attacker to execute arbitrary code via a crafted SOAP fault message that causes A…"
+    },
     {
       "cveID": "CVE-2026-115731",
       "vendorProject": "Perforce",
@@ -498,46 +538,6 @@
       "dueDate": "2026-10-19",
       "knownRansomwareCampaignUse": "Unknown",
       "shortDescription": "FortiOS, FortiPAM, FortiProxy, and FortiSwitchManager contain a path traversal vulnerability that may allow an authenticated attacker with admin profile and at least read-write per…"
-    },
-    {
-      "cveID": "CVE-2026-21589",
-      "vendorProject": "Atlassian",
-      "product": "Multiple Products",
-      "vulnerabilityName": "Atlassian Multiple Products Files or Directories Accessible to External Parties Vulnerability",
-      "dateAdded": "2026-10-15",
-      "dueDate": "2026-10-18",
-      "knownRansomwareCampaignUse": "Unknown",
-      "shortDescription": "Multiple Atlassian products (Bitbucket Data Center ,Confluence Data Center, Jira Service Management Data Center, Jira Software Data Center, Bamboo Data Center, Crowd Data Center, C…"
-    },
-    {
-      "cveID": "CVE-2026-105134",
-      "vendorProject": "Ahsay",
-      "product": "AhsayCBS",
-      "vulnerabilityName": "Ahsay AhsayCBS Command Injection Vulnerability",
-      "dateAdded": "2026-10-14",
-      "dueDate": "2026-10-17",
-      "knownRansomwareCampaignUse": "Unknown",
-      "shortDescription": "Ahsay AhsayCBS contains a command injection vulnerability that could allow a remote attacker to execute operating system commands via manipulation of the random parameter in the Re…"
-    },
-    {
-      "cveID": "CVE-2026-76519",
-      "vendorProject": "Cisco",
-      "product": "Secure Email Gateway",
-      "vulnerabilityName": "Cisco Secure Email Gateway Relative Path Traversal Vulnerability",
-      "dateAdded": "2026-10-14",
-      "dueDate": "2026-10-17",
-      "knownRansomwareCampaignUse": "Unknown",
-      "shortDescription": "Cisco Secure Email Gateway contains a relative path traversal vulnerability that could allow an unauthenticated, remote attacker to write arbitrary files on the underlying operatin…"
-    },
-    {
-      "cveID": "CVE-2026-105133",
-      "vendorProject": "Ahsay",
-      "product": "AhsayCBS",
-      "vulnerabilityName": "Ahsay AhsayCBS Improper Authentication Vulnerability",
-      "dateAdded": "2026-10-14",
-      "dueDate": "2026-10-17",
-      "knownRansomwareCampaignUse": "Unknown",
-      "shortDescription": "Ahsay AhsayCBS contains an improper authentication vulnerability that could allow a remote attacker to bypass authentication via manipulation of the random parameter in the API com…"
     }
   ]
 }
