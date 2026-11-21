@@ -1,18 +1,18 @@
 {
   "meta": {
     "title": "CISA Catalog of Known Exploited Vulnerabilities",
-    "catalogVersion": "2026.11.18",
-    "dateReleased": "2026-11-18T19:17:41.0354Z",
-    "generatedAt": "2026-11-20T15:26:41Z",
+    "catalogVersion": "2026.11.20",
+    "dateReleased": "2026-11-20T17:48:39.1516Z",
+    "generatedAt": "2026-11-21T14:39:10Z",
     "source": "CISA KEV",
     "sourceUrl": "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json"
   },
   "stats": {
-    "total": 1786,
-    "addedThisMonth": 20,
-    "addedLast30Days": 32,
+    "total": 1790,
+    "addedThisMonth": 24,
+    "addedLast30Days": 36,
     "ransomwareLinked": 361,
-    "forensicTriageYes": 108
+    "forensicTriageYes": 111
   },
   "addedByMonth": [
     {
@@ -85,7 +85,7 @@
     },
     {
       "month": "2026-11",
-      "count": 20
+      "count": 24
     }
   ],
   "topVendors": [
@@ -95,7 +95,7 @@
     },
     {
       "vendor": "Cisco",
-      "count": 103
+      "count": 104
     },
     {
       "vendor": "Apple",
@@ -115,7 +115,7 @@
     },
     {
       "vendor": "Apache",
-      "count": 42
+      "count": 43
     },
     {
       "vendor": "Ivanti",
@@ -139,6 +139,46 @@
     }
   ],
   "recent": [
+    {
+      "cveID": "CVE-2026-129448",
+      "vendorProject": "Apache",
+      "product": "Roller",
+      "vulnerabilityName": "Apache Roller Deserialization of Untrusted Data Vulnerability",
+      "dateAdded": "2026-11-20",
+      "dueDate": "2026-11-23",
+      "knownRansomwareCampaignUse": "Unknown",
+      "shortDescription": "Apache Roller contains a deserialization of untrusted data vulnerability that allows an unauthenticated remote attacker to execute arbitrary code via the XML-RPC endpoint, which ac…"
+    },
+    {
+      "cveID": "CVE-2026-123890",
+      "vendorProject": "Broadcom",
+      "product": "VMware vCenter",
+      "vulnerabilityName": "VMWare vCenter Authentication Bypass Using an Alternate Path or Channel Vulnerability",
+      "dateAdded": "2026-11-20",
+      "dueDate": "2026-11-23",
+      "knownRansomwareCampaignUse": "Unknown",
+      "shortDescription": "Broadcom VMware vCenter contains an authentication bypass using an alternate path or channel vulnerability in the VMware Directory Service that allows an unauthenticated attacker w…"
+    },
+    {
+      "cveID": "CVE-2025-42884",
+      "vendorProject": "SAP",
+      "product": "NetWeaver",
+      "vulnerabilityName": "SAP NetWeaver Improper Neutralization of Special Elements in Data Query Logic Vulnerability",
+      "dateAdded": "2026-11-20",
+      "dueDate": "2026-11-23",
+      "knownRansomwareCampaignUse": "Unknown",
+      "shortDescription": "SAP NetWeaver Enterprise Portal contains an improper neutralization of special elements in data query logic vulnerability that allows an unauthenticated attacker to disclose or mod…"
+    },
+    {
+      "cveID": "CVE-2026-76466",
+      "vendorProject": "Cisco",
+      "product": "Expressway Series",
+      "vulnerabilityName": "Cisco Expressway Series Use of Hard-coded Credentials Vulnerability",
+      "dateAdded": "2026-11-20",
+      "dueDate": "2026-11-23",
+      "knownRansomwareCampaignUse": "Unknown",
+      "shortDescription": "Cisco Expressway Series contains a use of hard-coded credentials vulnerability that allows an unauthenticated, remote attacker with persistent cookies and network access to execute…"
+    },
     {
       "cveID": "CVE-2024-10441",
       "vendorProject": "Synology",
@@ -498,46 +538,6 @@
       "dueDate": "2026-10-23",
       "knownRansomwareCampaignUse": "Unknown",
       "shortDescription": "Plex Media Server contains an improper neutralization of encoded URI schemes in a web page vulnerability that could allow an attacker to call other plugins' functions and supply th…"
-    },
-    {
-      "cveID": "CVE-2026-96652",
-      "vendorProject": "Plex",
-      "product": "Media Server",
-      "vulnerabilityName": "Plex Media Server Server-Side Request Forgery (SSRF) Vulnerability",
-      "dateAdded": "2026-10-20",
-      "dueDate": "2026-11-03",
-      "knownRansomwareCampaignUse": "Unknown",
-      "shortDescription": "Plex Media Server contains a server-side request forgery (SSRF) vulnerability which could allow an attacker using any X-Plex-Token value to include a full URL in the 'protocol' par…"
-    },
-    {
-      "cveID": "CVE-2026-110936",
-      "vendorProject": "Siemens",
-      "product": "Software Center",
-      "vulnerabilityName": "Siemens Software Center Uncontrolled Search Path Element Vulnerability",
-      "dateAdded": "2026-10-20",
-      "dueDate": "2026-11-03",
-      "knownRansomwareCampaignUse": "Unknown",
-      "shortDescription": "Siemens Software Center contains an uncontrolled search path element vulnerability that could allow an authenticated local attacker to place a specially crafted DLL in a directory…"
-    },
-    {
-      "cveID": "CVE-2026-102764",
-      "vendorProject": "BeyondTrust",
-      "product": "Remote Support",
-      "vulnerabilityName": "BeyondTrust Remote Support Authentication Bypass by Spoofing Vulnerability",
-      "dateAdded": "2026-10-16",
-      "dueDate": "2026-10-19",
-      "knownRansomwareCampaignUse": "Unknown",
-      "shortDescription": "BeyondTrust Remote Support contains an authentication bypass by spoofing vulnerability that could allow a remote attacker to perform file operations on the appliance."
-    },
-    {
-      "cveID": "CVE-2025-61624",
-      "vendorProject": "Fortinet",
-      "product": "Multiple Products",
-      "vulnerabilityName": "Fortinet Multiple Products Path Traversal Vulnerability",
-      "dateAdded": "2026-10-16",
-      "dueDate": "2026-10-19",
-      "knownRansomwareCampaignUse": "Unknown",
-      "shortDescription": "FortiOS, FortiPAM, FortiProxy, and FortiSwitchManager contain a path traversal vulnerability that may allow an authenticated attacker with admin profile and at least read-write per…"
     }
   ]
 }
