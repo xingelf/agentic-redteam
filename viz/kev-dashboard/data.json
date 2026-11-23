@@ -1,17 +1,17 @@
 {
   "meta": {
     "title": "CISA Catalog of Known Exploited Vulnerabilities",
-    "catalogVersion": "2026.11.20",
-    "dateReleased": "2026-11-20T17:48:39.1516Z",
-    "generatedAt": "2026-11-22T14:33:43Z",
+    "catalogVersion": "2026.11.23",
+    "dateReleased": "2026-11-23T12:54:37.9646Z",
+    "generatedAt": "2026-11-23T18:06:49Z",
     "source": "CISA KEV",
     "sourceUrl": "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json"
   },
   "stats": {
     "total": 1790,
     "addedThisMonth": 24,
-    "addedLast30Days": 36,
-    "ransomwareLinked": 361,
+    "addedLast30Days": 34,
+    "ransomwareLinked": 362,
     "forensicTriageYes": 111
   },
   "addedByMonth": [
@@ -186,7 +186,7 @@
       "vulnerabilityName": "Synology DiskStation Manager (DSM) Improper Encoding or Escaping of Output Vulnerability",
       "dateAdded": "2026-11-18",
       "dueDate": "2026-11-21",
-      "knownRansomwareCampaignUse": "Unknown",
+      "knownRansomwareCampaignUse": "Known",
       "shortDescription": "Synology DSM contains an improper encoding or escaping of output vulnerability in the system plugin daemon in Synology BeeStation OS (BSM) that could allow a remote attacker to exe…"
     },
     {
