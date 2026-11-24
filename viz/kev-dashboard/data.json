@@ -2,17 +2,17 @@
   "meta": {
     "title": "CISA Catalog of Known Exploited Vulnerabilities",
     "catalogVersion": "2026.11.23",
-    "dateReleased": "2026-11-23T12:54:37.9646Z",
-    "generatedAt": "2026-11-23T18:06:49Z",
+    "dateReleased": "2026-11-23T19:43:55.7979Z",
+    "generatedAt": "2026-11-24T17:43:21Z",
     "source": "CISA KEV",
     "sourceUrl": "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json"
   },
   "stats": {
-    "total": 1790,
-    "addedThisMonth": 24,
-    "addedLast30Days": 34,
+    "total": 1792,
+    "addedThisMonth": 26,
+    "addedLast30Days": 36,
     "ransomwareLinked": 362,
-    "forensicTriageYes": 111
+    "forensicTriageYes": 113
   },
   "addedByMonth": [
     {
@@ -85,7 +85,7 @@
     },
     {
       "month": "2026-11",
-      "count": 24
+      "count": 26
     }
   ],
   "topVendors": [
@@ -139,6 +139,26 @@
     }
   ],
   "recent": [
+    {
+      "cveID": "CVE-2026-133968",
+      "vendorProject": "Project MONAI",
+      "product": "MONAI Label",
+      "vulnerabilityName": "Project MONAI MONAI Label Path Traversal Vulnerability",
+      "dateAdded": "2026-11-23",
+      "dueDate": "2026-11-26",
+      "knownRansomwareCampaignUse": "Unknown",
+      "shortDescription": "Project MONAI MONAI Label contains a path traversal vulnerability that allows an unauthenticated remote attacker to write arbitrary files outside the intended datastore directory,…"
+    },
+    {
+      "cveID": "CVE-2026-134624",
+      "vendorProject": "N-able",
+      "product": "MailAssure",
+      "vulnerabilityName": "N-able MailAssure (SpamExperts) Server-Side Request Forgery (SSRF) Vulnerability",
+      "dateAdded": "2026-11-23",
+      "dueDate": "2026-11-26",
+      "knownRansomwareCampaignUse": "Unknown",
+      "shortDescription": "N-able MailAssure (SpamExperts) contains a server-side request forgery vulnerability in the LDAP synchronization connection check that allows an authenticated API user to connect t…"
+    },
     {
       "cveID": "CVE-2026-129448",
       "vendorProject": "Apache",
@@ -518,26 +538,6 @@
       "dueDate": "2026-10-23",
       "knownRansomwareCampaignUse": "Unknown",
       "shortDescription": "Plex Media Server contains an external control of file name or path vulnerability which can allow an admin user to write arbitrary files that may be executed on load. This vulnerab…"
-    },
-    {
-      "cveID": "CVE-2026-96655",
-      "vendorProject": "Plex",
-      "product": "Media Server",
-      "vulnerabilityName": "Plex Media Server Server-Side Request Forgery (SSRF) Vulnerability",
-      "dateAdded": "2026-10-20",
-      "dueDate": "2026-11-03",
-      "knownRansomwareCampaignUse": "Unknown",
-      "shortDescription": "Plex Media Server contains a server-side request forgery (SSRF) vulnerability that could allow an authenticated user to request arbitrary internal or external addresses via the '/v…"
-    },
-    {
-      "cveID": "CVE-2026-96654",
-      "vendorProject": "Plex",
-      "product": "Media Server",
-      "vulnerabilityName": "Plex Media Server Improper Neutralization of Encoded URI Schemes in a Web Page Vulnerability",
-      "dateAdded": "2026-10-20",
-      "dueDate": "2026-10-23",
-      "knownRansomwareCampaignUse": "Unknown",
-      "shortDescription": "Plex Media Server contains an improper neutralization of encoded URI schemes in a web page vulnerability that could allow an attacker to call other plugins' functions and supply th…"
     }
   ]
 }
