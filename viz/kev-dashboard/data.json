@@ -1,18 +1,18 @@
 {
   "meta": {
     "title": "CISA Catalog of Known Exploited Vulnerabilities",
-    "catalogVersion": "2026.11.23",
-    "dateReleased": "2026-11-23T19:43:55.7979Z",
-    "generatedAt": "2026-11-24T17:43:21Z",
+    "catalogVersion": "2026.11.25",
+    "dateReleased": "2026-11-25T14:22:29.6361Z",
+    "generatedAt": "2026-11-25T17:12:16Z",
     "source": "CISA KEV",
     "sourceUrl": "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json"
   },
   "stats": {
-    "total": 1792,
-    "addedThisMonth": 26,
-    "addedLast30Days": 36,
+    "total": 1796,
+    "addedThisMonth": 30,
+    "addedLast30Days": 40,
     "ransomwareLinked": 362,
-    "forensicTriageYes": 113
+    "forensicTriageYes": 117
   },
   "addedByMonth": [
     {
@@ -85,7 +85,7 @@
     },
     {
       "month": "2026-11",
-      "count": 26
+      "count": 30
     }
   ],
   "topVendors": [
@@ -139,6 +139,46 @@
     }
   ],
   "recent": [
+    {
+      "cveID": "CVE-2026-103406",
+      "vendorProject": "Hewlett Packard Enterprise (HPE)",
+      "product": "Juniper Session Smart Conductor and Session Smart Router",
+      "vulnerabilityName": "Hewlett Packard Enterprise (HPE) Juniper Session Smart Conductor and Session Smart Router OS Command Injection Vulnerability",
+      "dateAdded": "2026-11-25",
+      "dueDate": "2026-11-28",
+      "knownRansomwareCampaignUse": "Unknown",
+      "shortDescription": "Hewlett Packard Enterprise (HPE) Juniper Session Smart Conductor and Session Smart Router contain an OS command injection vulnerability that could allow a remote attacker to execut…"
+    },
+    {
+      "cveID": "CVE-2026-132224",
+      "vendorProject": "Optimizely",
+      "product": "Web Experimentation",
+      "vulnerabilityName": "Optimizely Web Experimentation External Control of Critical State Data Vulnerability",
+      "dateAdded": "2026-11-24",
+      "dueDate": "2026-11-27",
+      "knownRansomwareCampaignUse": "Unknown",
+      "shortDescription": "Optimizely Web Experimentation contains an external control of critical state data vulnerability in its account signup flow that could allow an attacker to impersonate existing cus…"
+    },
+    {
+      "cveID": "CVE-2026-131914",
+      "vendorProject": "Idunno",
+      "product": "AntiCsrf",
+      "vulnerabilityName": "Idunno AntiCsrf Deserialization of Untrusted Data Vulnerability",
+      "dateAdded": "2026-11-24",
+      "dueDate": "2026-11-27",
+      "knownRansomwareCampaignUse": "Unknown",
+      "shortDescription": "Idunno AntiCsrf contains a deserialization of untrusted data vulnerability that allows an unauthenticated remote attacker to execute arbitrary code via object injection. The impact…"
+    },
+    {
+      "cveID": "CVE-2026-132165",
+      "vendorProject": "Drupal",
+      "product": "Core",
+      "vulnerabilityName": "Drupal Core Remote Code Execution Vulnerability",
+      "dateAdded": "2026-11-24",
+      "dueDate": "2026-11-27",
+      "knownRansomwareCampaignUse": "Unknown",
+      "shortDescription": "Drupal Core contains a not failing securely vulnerability that could allow an unauthenticated attacker to take over an existing site or execute arbitrary code via the Drupal instal…"
+    },
     {
       "cveID": "CVE-2026-133968",
       "vendorProject": "Project MONAI",
@@ -498,46 +538,6 @@
       "dueDate": "2026-10-29",
       "knownRansomwareCampaignUse": "Unknown",
       "shortDescription": "PHP contains a stale internal request-state vulnerability that allows for unauthenticated remote code execution."
-    },
-    {
-      "cveID": "CVE-2026-114625",
-      "vendorProject": "Arista",
-      "product": "VeloCloud Orchestrator",
-      "vulnerabilityName": "Arista VeloCloud Orchestrator SQL Injection Vulnerability",
-      "dateAdded": "2026-10-23",
-      "dueDate": "2026-10-26",
-      "knownRansomwareCampaignUse": "Unknown",
-      "shortDescription": "Arista VeloCloud Orchestrator on-prem contains a SQL injection vulnerability that may allow a remote attacker to access privileged internal functionality and impact the VCO host. S…"
-    },
-    {
-      "cveID": "CVE-2026-110447",
-      "vendorProject": "Collabora",
-      "product": "Collabora Online – Built-in CODE Server",
-      "vulnerabilityName": "Collabora Online – Built-in CODE Server OS Command Injection Vulnerability",
-      "dateAdded": "2026-10-23",
-      "dueDate": "2026-10-26",
-      "knownRansomwareCampaignUse": "Unknown",
-      "shortDescription": "Collabora Collabora Online – Built-in CODE Server when used within the NextCloud platform contains an OS command injection vulnerability that allows for remote code execution when…"
-    },
-    {
-      "cveID": "CVE-2026-106931",
-      "vendorProject": "EG Secure Solutions",
-      "product": "SiteGuard Server Edition",
-      "vulnerabilityName": "EG Secure Solutions SiteGuard Server Edition OS Command Injection Vulnerability",
-      "dateAdded": "2026-10-20",
-      "dueDate": "2026-10-23",
-      "knownRansomwareCampaignUse": "Unknown",
-      "shortDescription": "EG Secure Solutions SiteGuard Server Edition contains an OS command injection vulnerability which may allow an attacker to execute arbitrary OS commands with root or SYSTEM privile…"
-    },
-    {
-      "cveID": "CVE-2026-96656",
-      "vendorProject": "Plex",
-      "product": "Media Server",
-      "vulnerabilityName": "Plex Media Server External Control of File Name or Path Vulnerability",
-      "dateAdded": "2026-10-20",
-      "dueDate": "2026-10-23",
-      "knownRansomwareCampaignUse": "Unknown",
-      "shortDescription": "Plex Media Server contains an external control of file name or path vulnerability which can allow an admin user to write arbitrary files that may be executed on load. This vulnerab…"
     }
   ]
 }
