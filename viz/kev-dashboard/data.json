@@ -1,18 +1,18 @@
 {
   "meta": {
     "title": "CISA Catalog of Known Exploited Vulnerabilities",
-    "catalogVersion": "2026.11.25",
-    "dateReleased": "2026-11-25T19:48:12.4344Z",
-    "generatedAt": "2026-11-27T16:39:28Z",
+    "catalogVersion": "2026.11.27",
+    "dateReleased": "2026-11-27T18:03:12.5733Z",
+    "generatedAt": "2026-11-28T15:30:42Z",
     "source": "CISA KEV",
     "sourceUrl": "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json"
   },
   "stats": {
-    "total": 1805,
-    "addedThisMonth": 39,
-    "addedLast30Days": 45,
+    "total": 1808,
+    "addedThisMonth": 42,
+    "addedLast30Days": 46,
     "ransomwareLinked": 362,
-    "forensicTriageYes": 122
+    "forensicTriageYes": 123
   },
   "addedByMonth": [
     {
@@ -85,7 +85,7 @@
     },
     {
       "month": "2026-11",
-      "count": 39
+      "count": 42
     }
   ],
   "topVendors": [
@@ -139,6 +139,36 @@
     }
   ],
   "recent": [
+    {
+      "cveID": "CVE-2026-120705",
+      "vendorProject": "OSGeo",
+      "product": "GeoServer",
+      "vulnerabilityName": "OSGeo GeoServer XML Injection Vulnerability",
+      "dateAdded": "2026-11-27",
+      "dueDate": "2026-11-30",
+      "knownRansomwareCampaignUse": "Unknown",
+      "shortDescription": "OsGeo GeoServer contains an XML injection vulnerability that allows an unauthenticated remote attacker to cause the server to read local text files accessible to the GeoServer proc…"
+    },
+    {
+      "cveID": "CVE-2026-129243",
+      "vendorProject": "OSGeo",
+      "product": "GeoServer",
+      "vulnerabilityName": "OSGeo GeoServer Incorrect Authorization Vulnerability",
+      "dateAdded": "2026-11-27",
+      "dueDate": "2026-11-30",
+      "knownRansomwareCampaignUse": "Unknown",
+      "shortDescription": "GeoServer contains an incorrect authorization vulnerability that allows an unauthenticated remote attacker to bypass service-level role checks and invoke operations protected solel…"
+    },
+    {
+      "cveID": "CVE-2026-136716",
+      "vendorProject": "Drupal",
+      "product": "Core",
+      "vulnerabilityName": "Drupal Core Improper Check for Unusual or Exceptional Conditions Vulnerability",
+      "dateAdded": "2026-11-27",
+      "dueDate": "2026-11-30",
+      "knownRansomwareCampaignUse": "Unknown",
+      "shortDescription": "Drupal Core contains an improper check for unusual or exceptional conditions vulnerability that allows an unauthenticated remote attacker to take over a site via the exposed Drupal…"
+    },
     {
       "cveID": "CVE-2026-103406",
       "vendorProject": "Hewlett Packard Enterprise (HPE)",
@@ -508,36 +538,6 @@
       "dueDate": "2026-11-20",
       "knownRansomwareCampaignUse": "Unknown",
       "shortDescription": "SonicWall SonicOS SSLVPN contains a use of single-factor authentication vulnerability that may allow a user with valid credentials for an alternate authentication method to bypass…"
-    },
-    {
-      "cveID": "CVE-2024-27834",
-      "vendorProject": "Apple",
-      "product": "Multiple Products",
-      "vulnerabilityName": "Apple Multiple Products Improper Authentication Vulnerability",
-      "dateAdded": "2026-11-04",
-      "dueDate": "2026-11-18",
-      "knownRansomwareCampaignUse": "Unknown",
-      "shortDescription": "Apple iOS, iPadOS, macOS, Safari, tvOS and watchOS 10.5 contain an improper authentication vulnerability which could allow an attacker with arbitrary read and write capability to b…"
-    },
-    {
-      "cveID": "CVE-2026-119977",
-      "vendorProject": "WordPress",
-      "product": "WordPress Core",
-      "vulnerabilityName": "WordPress WordPress Core Time-of-check Time-of-use (TOCTOU) Race Condition Vulnerability",
-      "dateAdded": "2026-11-03",
-      "dueDate": "2026-11-06",
-      "knownRansomwareCampaignUse": "Unknown",
-      "shortDescription": "WordPress WordPress Core contains a time-of-check time-of-use (TOCTOU) race condition vulnerability that could allow unauthenticated attackers to execute code on the server during…"
-    },
-    {
-      "cveID": "CVE-2026-118527",
-      "vendorProject": "Ivanti",
-      "product": "Connect Secure",
-      "vulnerabilityName": "Ivanti Connect Secure Generation of Predictable Numbers or Identifiers Vulnerability",
-      "dateAdded": "2026-10-30",
-      "dueDate": "2026-11-13",
-      "knownRansomwareCampaignUse": "Unknown",
-      "shortDescription": "Ivanti Connect Secure contains a generation of predictable numbers or identifiers vulnerability that allows a remote authenticated attacker to upload files with attacker-controlled…"
     }
   ]
 }
